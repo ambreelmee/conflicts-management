@@ -1,1 +1,1 @@
-from .user import USER_BLUEPRINT
+from .institution import INSTITUTION_BLUEPRINT

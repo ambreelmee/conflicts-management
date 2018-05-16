@@ -1,1 +1,1 @@
-from .user import UserRepository
+from .institution import InstitutionRepository
