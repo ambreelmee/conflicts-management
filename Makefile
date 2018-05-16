@@ -1,5 +1,5 @@
 install:
-	docker-compose run --rm server pip install -r requirements-dev.txt --user --upgrade
+	docker-compose run --rm server pip install --proxy=10.244.16.9:9090 -r requirements-dev.txt --user --upgrade
 
 start:
 	docker-compose up server
@@ -14,7 +14,7 @@ lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
 
 db/connect:
-	docker exec -it flaskapistarterkit_db_1 psql -Upostgres
+	docker exec -it flask-api-starter-kit_db_1 psql -Upostgres
 
 db/downgrade:
 	docker-compose run --rm server python src/manage.py db downgrade

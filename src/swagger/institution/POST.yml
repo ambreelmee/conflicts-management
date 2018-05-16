@@ -1,0 +1,25 @@
+Create an institution based on the sent information
+---
+tags:
+  - institution
+parameters:
+  - name: uai_number
+    in: path
+    type: string
+    description: the uai number of the institution
+  - name: body
+    in: body
+    schema:
+      type: object
+      properties:
+        is_institution:
+          type: boolean
+          description: The status of the institution
+responses:
+  200:
+    description: The institution was successfully created
+    schema:
+      example:
+        institution:
+          uai_number: 0802145X
+          is_institution: True
