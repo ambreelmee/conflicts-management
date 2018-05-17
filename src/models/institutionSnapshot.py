@@ -6,7 +6,7 @@ from .abc import BaseModel
 
 
 class InstitutionSnapshot(db.Model, BaseModel):
-    """ The Conflict model """
+    """ The InstitutionSnapshot model """
     __tablename__ = 'institutionSnapshot'
     numero_uai = db.Column(db.String(8), primary_key=True)
     sigle_uai = db.Column(db.String(14))

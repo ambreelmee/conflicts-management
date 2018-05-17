@@ -1,3 +1,4 @@
 from .conflict import ConflictRepository
+from .connectionSnapshot import ConnectionSnapshotRepository
 from .institution import InstitutionRepository
 from .institutionSnapshot import InstitutionSnapshotRepository
