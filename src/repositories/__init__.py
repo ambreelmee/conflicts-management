@@ -1,2 +1,3 @@
-from .institution import InstitutionRepository
 from .conflict import ConflictRepository
+from .institution import InstitutionRepository
+from .institutionSnapshot import InstitutionSnapshotRepository
