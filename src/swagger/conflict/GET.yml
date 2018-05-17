@@ -1,0 +1,20 @@
+Return all the conflicts related to a given institution
+---
+tags:
+  - conflict
+parameters:
+  - name: id_esr
+    in: path
+    type: string
+    description: the id_esr of the institution
+responses:
+  200:
+    description: The institution's conflicts were successfully retrieved
+    schema:
+      example:
+        id_esr: 23
+        uai_number: 0802145X
+        field_name: address_1
+        current_value: 12 rue des bois
+        new_value: 36 rue des belles feuilles
+        active: True

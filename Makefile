@@ -14,7 +14,7 @@ lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
 
 db/connect:
-	docker exec -it flask-api-starter-kit_db_1 psql -Upostgres
+	docker exec -it conflicts-management_db_1 psql -Upostgres
 
 db/downgrade:
 	docker-compose run --rm server python src/manage.py db downgrade

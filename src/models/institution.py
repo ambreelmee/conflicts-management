@@ -10,7 +10,8 @@ class Institution(db.Model, BaseModel):
     __tablename__ = 'institution'
 
     uai_number = db.Column(db.String(20), primary_key=True)
-    # classify institutions from bce depending on whether they should be in dataESR or not
+    # classify institutions from bce
+    # depending on whether they should be in dataESR or not
     is_institution = db.Column(db.Boolean, nullable=False)
 
     def __init__(self, uai_number, is_institution):
