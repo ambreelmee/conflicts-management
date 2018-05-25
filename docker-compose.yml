@@ -33,6 +33,7 @@ testserver:
   environment:
     APPLICATION_PORT: 5053
     APPLICATION_DB_CONTAINER: TESTDB
+    PYTHONUNBUFFERED: 1
   command: python -m pytest test/
 
 testdb:

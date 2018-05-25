@@ -7,7 +7,7 @@ from flask.ext.restful.reqparse import Argument
 from flask.json import jsonify
 
 from repositories import ConflictRepository
-from util import parse_params
+from util import parse_params, authorized
 
 
 class ConflictResource(Resource):
@@ -15,6 +15,7 @@ class ConflictResource(Resource):
 
     @staticmethod
     @swag_from('../swagger/conflict/GET.yml')
+    @authorized
     def get(id_path):
         """ Return all conflicts for a given institutions """
         conflicts = ConflictRepository.getConflictsByInstitution(
@@ -31,6 +32,7 @@ class ConflictResource(Resource):
         ),
     )
     @swag_from('../swagger/conflict/PUT.yml')
+    @authorized
     def put(id_path, active):
         """ Update a conflict status """
         repository = ConflictRepository()
