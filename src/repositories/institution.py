@@ -23,6 +23,8 @@ class InstitutionRepository:
     @staticmethod
     def create(uai_number, is_institution=True):
         """ Create a new institution """
-        institution = Institution(uai_number=uai_number, is_institution=is_institution)
+        institution = Institution(
+            uai_number=uai_number,
+            is_institution=is_institution)
 
         return institution.save()

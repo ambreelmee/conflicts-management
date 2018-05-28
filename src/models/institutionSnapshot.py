@@ -7,7 +7,7 @@ from .abc import BaseModel
 
 class InstitutionSnapshot(db.Model, BaseModel):
     """ The InstitutionSnapshot model """
-    __tablename__ = 'institutionSnapshot'
+    __tablename__ = 'institution_snapshot'
     numero_uai = db.Column(db.String(8), primary_key=True)
     sigle_uai = db.Column(db.String(14))
     patronyme_uai = db.Column(db.String(30))
@@ -23,8 +23,8 @@ class InstitutionSnapshot(db.Model, BaseModel):
     ministere_tutelle = db.Column(db.String(2))
     categorie_juridique = db.Column(db.String(3))
     site_web = db.Column(db.String(100))
-    coordonnee_x = db.Column(db.Numeric(9, 8))
-    coordonnee_y = db.Column(db.Numeric(9, 8))
+    coordonnee_x = db.Column(db.Numeric)
+    coordonnee_y = db.Column(db.Numeric)
 
     def __init__(self,
                  categorie_juridique,

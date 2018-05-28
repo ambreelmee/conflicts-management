@@ -3,7 +3,6 @@ import json
 
 from server import server
 from models.abc import db
-from models import Conflict
 from repositories import ConflictRepository
 
 

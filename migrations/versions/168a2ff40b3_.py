@@ -1,4 +1,4 @@
-"""Create ConnectionSnapshot table
+"""Create Connection_snapshot table
 
 Revision ID: 168a2ff40b3
 Revises: 17458089ba6
@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 def upgrade():
     op.create_table(
-        'connectionSnapshot',
+        'connection_snapshot',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('numero_uai', sa.String(length=8), nullable=True),
         sa.Column('numero_uai_rattachee', sa.String(length=8), nullable=True),

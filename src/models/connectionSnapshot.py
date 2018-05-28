@@ -7,7 +7,7 @@ from .abc import BaseModel
 
 class ConnectionSnapshot(db.Model, BaseModel):
     """ The ConnectionSnapshot model """
-    __tablename__ = 'connectionSnapshot'
+    __tablename__ = 'connection_snapshot'
     id = db.Column(db.Integer, primary_key=True)
     numero_uai = db.Column(db.String(8))
     numero_uai_rattachee = db.Column(db.String(8))

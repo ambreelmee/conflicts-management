@@ -1,14 +1,15 @@
 from flask import abort, request
 import requests
+import os
 
 
 def validate_token(access_token):
     '''Verifies that an access-token is valid
     Returns a boolean'''
     headers = {'Authorization':  access_token}
-    proxyDict = {"http": "10.244.16.9:9090"}
-    url = 'https://data-esr-authentification.herokuapp.com/api/check_token'
-    r = requests.post(url, proxies=proxyDict, headers=headers)
+    proxyDict = {"http": os.getenv('HTTP_PROXY')}
+    r = requests.post(os.getenv('CHECK_TOKEN_URL'),
+                      proxies=proxyDict, headers=headers)
     return r.status_code == 200
 
 

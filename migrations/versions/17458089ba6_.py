@@ -1,4 +1,4 @@
-"""Create InstitutionSnapshot table
+"""Create Institution_snapshot table
 
 Revision ID: 17458089ba6
 Revises: 47c5f58fe5e
@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 def upgrade():
     op.create_table(
-        'institutionSnapshot',
+        'institution_snapshot',
         sa.Column('numero_uai', sa.String(length=8), nullable=False),
         sa.Column('sigle_uai', sa.String(length=14), nullable=True),
         sa.Column('patronyme_uai', sa.String(length=30), nullable=True),
@@ -35,9 +35,9 @@ def upgrade():
         sa.Column('categorie_juridique', sa.String(length=3), nullable=True),
         sa.Column('site_web', sa.String(length=100), nullable=True),
         sa.Column(
-            'coordonnee_x', sa.Numeric(precision=9, scale=8), nullable=True),
+            'coordonnee_x', sa.Numeric(), nullable=True),
         sa.Column(
-            'coordonnee_y', sa.Numeric(precision=9, scale=8), nullable=True),
+            'coordonnee_y', sa.Numeric(), nullable=True),
         sa.PrimaryKeyConstraint('numero_uai')
     )
 

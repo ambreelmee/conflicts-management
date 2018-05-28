@@ -13,6 +13,9 @@ tests:
 lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
 
+update:
+	docker-compose run --rm server bash -c "python ./src/manage.py saveInstitutionInformation"
+
 db/connect:
 	docker exec -it conflicts-management_db_1 psql -Upostgres
 
