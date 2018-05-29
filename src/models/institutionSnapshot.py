@@ -23,8 +23,6 @@ class InstitutionSnapshot(db.Model, BaseModel):
     ministere_tutelle = db.Column(db.String(2))
     categorie_juridique = db.Column(db.String(3))
     site_web = db.Column(db.String(100))
-    coordonnee_x = db.Column(db.Numeric)
-    coordonnee_y = db.Column(db.Numeric)
 
     def __init__(self,
                  categorie_juridique,
@@ -41,9 +39,7 @@ class InstitutionSnapshot(db.Model, BaseModel):
                  localite_acheminement_uai,
                  numero_siren_siret_uai,
                  numero_telephone_uai,
-                 site_web,
-                 coordonnee_x,
-                 coordonnee_y):
+                 site_web):
         """ Create a new institutionSnapshot """
         self.categorie_juridique = categorie_juridique
         self.ministere_tutelle = ministere_tutelle
@@ -60,8 +56,6 @@ class InstitutionSnapshot(db.Model, BaseModel):
         self.numero_siren_siret_uai = numero_siren_siret_uai
         self.numero_telephone_uai = numero_telephone_uai
         self.site_web = site_web
-        self.coordonnee_x = coordonnee_x
-        self.coordonnee_y = coordonnee_y
 
     def to_dict(self):
         """ Return the Conflict model as a python dictionary """
@@ -81,6 +75,4 @@ class InstitutionSnapshot(db.Model, BaseModel):
             'numero_siren_siret_uai': self.numero_siren_siret_uai,
             'numero_telephone_uai': self.numero_telephone_uai,
             'site_web': self.site_web,
-            'coordonnee_x': self.coordonnee_x,
-            'coordonnee_y': self.coordonnee_y
         }
