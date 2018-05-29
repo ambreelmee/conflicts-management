@@ -28,4 +28,4 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_table('connectionSnapshot')
+    op.drop_table('connection_snapshot')

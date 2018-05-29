@@ -11,7 +11,7 @@ class InstitutionRepository:
         """ Query an insitution by its uai_number """
         return Institution.query.filter_by(
             uai_number=uai_number,
-        ).one()
+        ).first()
 
     def update(self, uai_number, is_institution):
         """ Update an institution's status """

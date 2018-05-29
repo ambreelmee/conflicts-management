@@ -34,13 +34,9 @@ def upgrade():
         sa.Column('ministere_tutelle', sa.String(length=2), nullable=True),
         sa.Column('categorie_juridique', sa.String(length=3), nullable=True),
         sa.Column('site_web', sa.String(length=100), nullable=True),
-        sa.Column(
-            'coordonnee_x', sa.Numeric(), nullable=True),
-        sa.Column(
-            'coordonnee_y', sa.Numeric(), nullable=True),
         sa.PrimaryKeyConstraint('numero_uai')
     )
 
 
 def downgrade():
-    op.drop_table('institutionSnapshot')
+    op.drop_table('institution_snapshot')
