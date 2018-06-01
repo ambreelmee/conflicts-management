@@ -1,1 +1,2 @@
 from .update_from_bce import update_from_bce
+from .seed_database_connection import seed_database_connection

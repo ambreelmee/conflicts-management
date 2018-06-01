@@ -40,9 +40,10 @@ def create_esr_institution(token, numero_uai, sigle_uai, patronyme_uai,
                      numero_uai, id_esr)
         count += 1
         create_numero_uai(numero_uai, id_esr, headers, code_categories)
-        create_address(patronyme_uai, adresse_uai, boite_postale_uai,
-                       code_postal_uai, localite_acheminement_uai,
-                       numero_telephone_uai, id_esr, headers)
+        if adresse_uai:
+            create_address(patronyme_uai, adresse_uai, boite_postale_uai,
+                           code_postal_uai, localite_acheminement_uai,
+                           numero_telephone_uai, id_esr, headers)
         create_ministere_tutelle(ministere_tutelle, id_esr, headers)
         create_public_prive(secteur_public_prive, id_esr, headers)
         create_categorie_juridique(categorie_juridique, id_esr, headers)
@@ -88,7 +89,7 @@ def create_address(patronyme_uai, adresse_uai, boite_postale_uai,
     if r.status_code == 200:
         logging.debug('%s: address created', id_esr)
     else:
-        logging.error('%s: address not created', id_esr)
+        logging.error('%s: address not created, error :%s', id_esr, r.json())
 
 
 def create_ministere_tutelle(ministere_tutelle, id_esr, headers):
@@ -101,7 +102,8 @@ def create_ministere_tutelle(ministere_tutelle, id_esr, headers):
     if r.status_code == 200:
         logging.debug('%s: ministere_tutelle created', id_esr)
     else:
-        logging.error('%s: ministere_tutelle not created', id_esr)
+        logging.error('%s: ministere_tutelle not created, error: %s:',
+                      id_esr, r.json())
 
 
 def create_public_prive(secteur_public_prive, id_esr, headers):
@@ -113,7 +115,8 @@ def create_public_prive(secteur_public_prive, id_esr, headers):
     if r.status_code == 200:
         logging.debug('%s: secteur_public_prive created', id_esr)
     else:
-        logging.error('%s: secteur_public_prive not created', id_esr)
+        logging.error('%s: secteur_public_prive not created, error: %s',
+                      id_esr, r.json())
 
 
 def create_categorie_juridique(categorie_juridique, id_esr, headers):
@@ -125,7 +128,8 @@ def create_categorie_juridique(categorie_juridique, id_esr, headers):
     if r.status_code == 200:
         logging.debug('%s: categorie_juridique created', id_esr)
     else:
-        logging.error('%s: categorie_juridique not created', id_esr)
+        logging.error('%s: categorie_juridique not created, error: %s',
+                      id_esr, r.json())
 
 
 def create_website(site_web, id_esr, headers, link_categories):
@@ -138,7 +142,7 @@ def create_website(site_web, id_esr, headers, link_categories):
     if r.status_code == 200:
         logging.debug('%s: site_web created', id_esr)
     else:
-        logging.error('%s: site_web not created', id_esr)
+        logging.error('%s: site_web not created, error: %s', id_esr, r.json())
 
 
 def create_siret(numero_siren_siret_uai, id_esr, headers, code_categories):
@@ -153,4 +157,5 @@ def create_siret(numero_siren_siret_uai, id_esr, headers, code_categories):
     if r.status_code == 200:
         logging.debug('%s: numero_siren_siret_uai created', id_esr)
     else:
-        logging.error('%s: numero_siren_siret_uai not created', id_esr)
+        logging.error('%s: numero_siren_siret_uai not created, error: %s',
+                      id_esr, r.json())

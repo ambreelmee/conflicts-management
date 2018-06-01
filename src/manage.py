@@ -4,7 +4,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 import logging
 from models import db
-from tasks import update_from_bce
+from tasks import update_from_bce, seed_database_connection
 
 
 server = Flask(__name__)
@@ -21,6 +21,11 @@ manager.add_command('db', MigrateCommand)
 def script_update_from_bce():
     logging.getLogger(__name__)
     update_from_bce()
+
+
+@manager.command
+def seed():
+    seed_database_connection()
 
 
 if __name__ == '__main__':
