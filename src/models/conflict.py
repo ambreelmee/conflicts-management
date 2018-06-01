@@ -12,7 +12,7 @@ class Conflict(db.Model, BaseModel):
     uai_number = db.Column(db.String(20), nullable=False)
     field_name = db.Column(db.String(50), nullable=False)
     current_value = db.Column(db.String(120), nullable=True)
-    new_value = db.Column(db.String(120), nullable=False)
+    new_value = db.Column(db.String(120), nullable=True)
     active = db.Column(db.Boolean, nullable=False)
     id_esr = db.Column(db.Integer, nullable=False)
 

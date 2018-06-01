@@ -8,7 +8,7 @@ def validate_token(access_token):
     Returns a boolean'''
     headers = {'Authorization':  access_token}
     proxyDict = {"http": os.getenv('HTTP_PROXY')}
-    r = requests.post(os.getenv('CHECK_TOKEN_URL'),
+    r = requests.post(os.getenv('AUTH_TOKEN')+'check_token',
                       proxies=proxyDict, headers=headers)
     return r.status_code == 200
 

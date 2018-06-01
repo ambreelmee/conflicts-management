@@ -33,9 +33,7 @@ class TestInstitutionSnapshot(unittest.TestCase):
              secteur_public_prive='PU',
              ministere_tutelle='1',
              categorie_juridique='36',
-             site_web='sitequidechire.com',
-             coordonnee_x='0.156465',
-             coordonnee_y='6.3454')
+             site_web='sitequidechire.com')
         result = InstitutionSnapshotRepository.get('0802145Y')
         self.assertEqual(institution, result)
 
@@ -54,9 +52,7 @@ class TestInstitutionSnapshot(unittest.TestCase):
              secteur_public_prive='PU',
              ministere_tutelle='1',
              categorie_juridique='36',
-             site_web='sitequidechire.com',
-             coordonnee_x='0.156465',
-             coordonnee_y='6.3454')
+             site_web='sitequidechire.com')
         repository = InstitutionSnapshotRepository()
         update = InstitutionSnapshotRepository.update(
             repository, numero_uai='0802145Y', site_web='nouveausite')

@@ -11,7 +11,7 @@ class InstitutionSnapshotRepository:
         """ Query an insitution's snapshot by its uai_number """
         return InstitutionSnapshot.query.filter_by(
             numero_uai=numero_uai,
-        ).one()
+        ).first()
 
     def update(self,
                numero_uai,
@@ -28,9 +28,7 @@ class InstitutionSnapshotRepository:
                secteur_public_prive=None,
                ministere_tutelle=None,
                categorie_juridique=None,
-               site_web=None,
-               coordonnee_x=None,
-               coordonnee_y=None):
+               site_web=None):
         """ Update an institution's snapshot """
         institution = self.get(numero_uai)
         if sigle_uai:
@@ -61,10 +59,6 @@ class InstitutionSnapshotRepository:
             institution.categorie_juridique = categorie_juridique
         if site_web:
             institution.site_web = site_web
-        if coordonnee_x:
-            institution.coordonnee_x = coordonnee_x
-        if coordonnee_y:
-            institution.coordonnee_y = coordonnee_y
 
         return institution.save()
 
@@ -83,9 +77,7 @@ class InstitutionSnapshotRepository:
                secteur_public_prive=None,
                ministere_tutelle=None,
                categorie_juridique=None,
-               site_web=None,
-               coordonnee_x=None,
-               coordonnee_y=None):
+               site_web=None):
         """ Create a new institution snapshot """
         institution = InstitutionSnapshot(
             numero_uai=numero_uai,
@@ -102,8 +94,6 @@ class InstitutionSnapshotRepository:
             secteur_public_prive=secteur_public_prive,
             ministere_tutelle=ministere_tutelle,
             categorie_juridique=categorie_juridique,
-            site_web=site_web,
-            coordonnee_x=coordonnee_x,
-            coordonnee_y=coordonnee_y)
+            site_web=site_web)
 
         return institution.save()

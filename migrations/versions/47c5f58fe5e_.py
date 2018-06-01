@@ -21,7 +21,7 @@ def upgrade():
         sa.Column('uai_number', sa.String(length=20), nullable=False),
         sa.Column('field_name', sa.String(length=50), nullable=False),
         sa.Column('current_value', sa.String(length=120), nullable=True),
-        sa.Column('new_value', sa.String(length=120), nullable=False),
+        sa.Column('new_value', sa.String(length=120), nullable=True),
         sa.Column('active', sa.Boolean(), nullable=False),
         sa.Column('id_esr', sa.Integer(), nullable=False),
         sa.PrimaryKeyConstraint('id')

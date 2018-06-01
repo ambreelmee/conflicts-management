@@ -11,7 +11,7 @@ marshmallow==1.2.2
 pep8==1.7.0
 psycopg2==2.7.1
 pytz==2014.10
-requests==2.3.0
+requests==2.18.4
 setproctitle==1.1.9
 six==1.9.0
 SQLAlchemy==0.9.8
