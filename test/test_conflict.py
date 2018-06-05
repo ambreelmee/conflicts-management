@@ -1,6 +1,6 @@
 import unittest
 import json
-
+from unittest.mock import patch
 from server import server
 from models.abc import db
 from repositories import ConflictRepository
@@ -45,7 +45,8 @@ class TestConflict(unittest.TestCase):
         self.assertEqual(response_json,
                          [conflict_1.to_dict(), conflict_2.to_dict()])
 
-    def test_update(self):
+    @patch('util.authorized.validate_token', return_value=True)
+    def test_update(self, mock_decorator):
         """ The PUT on `/conflict` should update an conflict's status """
         conflict = ConflictRepository.create(
               id_esr=12,
@@ -57,6 +58,7 @@ class TestConflict(unittest.TestCase):
         response = self.client.put(
             '/application/conflict/' + str(conflict.id),
             content_type='application/json',
+            headers={'Authorization': 'Bearer token'},
             data=json.dumps({
                 'active': False
             })

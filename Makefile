@@ -14,7 +14,7 @@ lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
 
 update:
-	docker-compose run --rm server script_update_from_bce
+	docker-compose run --rm server python src/manage.py script_update_from_bce
 
 db/connect:
 	docker exec -it conflicts-management_db_1 psql -Upostgres

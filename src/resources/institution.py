@@ -7,7 +7,8 @@ from flask.ext.restful.reqparse import Argument
 from flask.json import jsonify
 
 from repositories import InstitutionRepository
-from util import parse_params, authorized
+from util import parse_params
+from util.authorized import authorized
 
 
 class InstitutionResource(Resource):
@@ -15,7 +16,6 @@ class InstitutionResource(Resource):
 
     @staticmethod
     @swag_from('../swagger/institution/GET.yml')
-    @authorized
     def get(uai_number):
         """ Return an institution key information based on its uai number """
         institution = InstitutionRepository.get(uai_number=uai_number)
