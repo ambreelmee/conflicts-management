@@ -3,9 +3,9 @@ from repositories import DatabaseConnectionRepository
 
 def seed_database_connection():
     DatabaseConnectionRepository.create(
-        'sigle_uai', 'names', 'initials', None, None)
+        'sigle_uai', 'name', 'initials', None, None)
     DatabaseConnectionRepository.create(
-        'patronyme_uai', 'names', 'text', None, None)
+        'patronyme_uai', 'name', 'text', None, None)
     DatabaseConnectionRepository.create(
         'date_ouverture', None, 'date_start', None, None)
     DatabaseConnectionRepository.create(
@@ -13,15 +13,15 @@ def seed_database_connection():
     DatabaseConnectionRepository.create(
         'numero_siren_siret_uai', 'codes', 'content', 'category', 'siret')
     DatabaseConnectionRepository.create(
-        'adresse_uai', 'addresses', 'address_1', None, None)
+        'adresse_uai', 'address', 'address_1', None, None)
     DatabaseConnectionRepository.create(
-        'boite_postale_uai', 'addresses', 'address_2', None, None)
+        'boite_postale_uai', 'address', 'address_2', None, None)
     DatabaseConnectionRepository.create(
-        'code_postal_uai', 'addresses', 'zip_code', None, None)
+        'code_postal_uai', 'address', 'zip_code', None, None)
     DatabaseConnectionRepository.create(
-        'localite_acheminement_uai', 'addresses', 'city', None, None)
+        'localite_acheminement_uai', 'address', 'city', None, None)
     DatabaseConnectionRepository.create(
-        'numero_telephone_uai', 'addresses', 'phone', None, None)
+        'numero_telephone_uai', 'address', 'phone', None, None)
     DatabaseConnectionRepository.create(
         'secteur_public_prive', 'tags', 'id', 'category',
         'secteur public prive')

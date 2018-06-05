@@ -1,11 +1,10 @@
 import unittest
 import json
-
+from unittest.mock import patch
 from server import server
 from models.abc import db
 from models import Institution
 from repositories import InstitutionRepository
-
 
 class TestInstitution(unittest.TestCase):
 
