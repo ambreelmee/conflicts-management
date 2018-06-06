@@ -18,8 +18,6 @@ params = {
   'port': os.getenv('REMOTE_DB_PORT')
 }
 
-conn = psycopg2.connect(**params)
-
 
 def compare_esr_without_snapshot(
         numero_uai, sigle_uai, patronyme_uai, date_ouverture, date_fermeture,
@@ -54,7 +52,7 @@ def compare_esr_without_snapshot(
             count)
 
     # if institution exists in dataESR, check for conflicts
-    if esr_institution:
+    else:
         logging.debug('institution found in dataESR')
         esr_institution = esr_institution['institution']
         check_for_all_conflict(
@@ -95,14 +93,14 @@ def compare_esr_with_snapshot(
             numero_telephone_uai, secteur_public_prive, ministere_tutelle,
             categorie_juridique, site_web, esr_institution, snapshot)
 
-        # Update snpashot with new values
-        InstitutionSnapshotRepository.update(
-            InstitutionSnapshotRepository(), numero_uai, sigle_uai,
-            patronyme_uai, date_ouverture, date_fermeture,
-            numero_siren_siret_uai, adresse_uai, boite_postale_uai,
-            code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
-            secteur_public_prive, ministere_tutelle, categorie_juridique,
-            site_web)
+    # Update snpashot with new values
+    InstitutionSnapshotRepository.update(
+        InstitutionSnapshotRepository(), numero_uai, sigle_uai,
+        patronyme_uai, date_ouverture, date_fermeture,
+        numero_siren_siret_uai, adresse_uai, boite_postale_uai,
+        code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
+        secteur_public_prive, ministere_tutelle, categorie_juridique,
+        site_web)
     return count
 
 
@@ -127,6 +125,9 @@ def update_from_bce():
     # and their ids
     link_categories = get_link_categories(token)
     code_categories = get_code_categories(token)
+    count_new_institution_bce = 0
+    count_new_institution_dataESR = 0
+    conn = psycopg2.connect(**params)
 
     with conn:
         with conn.cursor() as curs:
@@ -139,11 +140,10 @@ def update_from_bce():
                 localite_acheminement_uai, numero_telephone_uai,
                 secteur_public_prive, ministere_tutelle, categorie_juridique,
                 site_web FROM bce_uai""")
-            rows = curs.fetchall()
             logging.info('start processing data')
-            for row in rows:
-                count_new_institution_bce = 0
-                count_new_institution_dataESR = 0
+            logging.info('%s', curs)
+            for row in curs:
+                logging.info('coucou')
                 # get the saved institution for a given uai number
                 # institution will be None if it doesn't exist in our database
                 institution = InstitutionRepository.get(uai_number=row[0])
@@ -225,4 +225,5 @@ def update_from_bce():
     logging.info('%s: new institutions from bce', count_new_institution_bce)
     logging.info('%s: new institutions created in dataESR',
                  count_new_institution_dataESR)
-    return
+    return ({'bce_count': count_new_institution_bce,
+             'esr_count': count_new_institution_dataESR})
