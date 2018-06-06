@@ -6,6 +6,7 @@ from models.abc import db
 from models import Institution
 from repositories import InstitutionRepository
 
+
 class TestInstitution(unittest.TestCase):
 
     @classmethod
