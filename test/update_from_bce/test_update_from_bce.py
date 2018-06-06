@@ -134,7 +134,8 @@ class TestUpdateFromBce(unittest.TestCase):
             ["0741574L", '320', "MU", "METIERS SANTE UNIV", "1997-09-01", None,
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
              " ", "ANNECY", None, 'PU', '20', '1', "test.com"]]
-        mock_connect.return_value.cursor.return_value.__enter__.return_value.fetchall.return_value = result
+        curs = mock_connect.return_value.cursor
+        curs.return_value.__enter__.return_value.fetchall.return_value = result
         count = update_from_bce()
         instit1 = InstitutionRepository.get('0741574J')
         instit2 = InstitutionRepository.get('0741574L')
@@ -143,4 +144,40 @@ class TestUpdateFromBce(unittest.TestCase):
         self.assertEqual(instit2.is_institution, False)
         self.assertEqual(mock_comparison.called, True)
         self.assertEqual(mock_comparison.call_count, 1)
-        self.assertEqual(count, {'bce_count': 0, 'esr_count': 1})
+        self.assertEqual(count, {'bce_count': 2, 'esr_count': 1})
+
+    @patch('tasks.update_from_bce.compare_esr_with_snapshot',
+           return_value=0)
+    @patch('tasks.update_from_bce.compare_esr_without_snapshot',
+           return_value=0)
+    @patch('tasks.update_from_bce.get_code_categories')
+    @patch('tasks.update_from_bce.get_link_categories')
+    @patch('tasks.update_from_bce.authenticate',
+           return_value={'access_token': 'token'})
+    @patch("psycopg2.connect")
+    def test_update_from_bce_institution(
+            self, mock_connect, mock_auth, mock_links, mock_codes,
+            mock_comparison_without_snapshot, mock_comparison_with_snapshot):
+        InstitutionRepository.create('0741574I', True)
+        InstitutionSnapshotRepository.create('0741574I')
+        InstitutionRepository.create('0741574J', True)
+        InstitutionRepository.create('0741574L', False)
+        result = [
+            ["0741574I", '400', "MS", "METIERS SANTE", "1997-09-01", None,
+             "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
+             " ", "ANNECY", None, 'PU', '20', '1', "test.com"],
+            ["0741574J", '400', "MS", "METIERS SANTE", "1997-09-01", None,
+             "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
+             " ", "ANNECY", None, 'PU', '20', '1', "test.com"],
+            ["0741574L", '320', "MU", "METIERS SANTE UNIV", "1997-09-01", None,
+             "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
+             " ", "ANNECY", None, 'PU', '20', '1', "test.com"]]
+        curs = mock_connect.return_value.cursor
+        curs.return_value.__enter__.return_value.fetchall.return_value = result
+        count = update_from_bce()
+
+        self.assertEqual(mock_comparison_without_snapshot.called, True)
+        self.assertEqual(mock_comparison_without_snapshot.call_count, 1)
+        self.assertEqual(mock_comparison_with_snapshot.called, True)
+        self.assertEqual(mock_comparison_with_snapshot.call_count, 1)
+        self.assertEqual(count, {'bce_count': 0, 'esr_count': 0})
