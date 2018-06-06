@@ -1,7 +1,7 @@
 import unittest
 from models.abc import db
 from server import server
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from tasks.update_from_bce import (
     compare_esr_without_snapshot, compare_esr_with_snapshot, update_from_bce)
 from repositories import InstitutionSnapshotRepository, InstitutionRepository
@@ -116,6 +116,7 @@ class TestUpdateFromBce(unittest.TestCase):
         self.assertEqual(args, expected_args)
         self.assertEqual(count, 0)
 
+
     @patch('tasks.update_from_bce.compare_esr_without_snapshot',
            return_value=1)
     @patch('tasks.update_from_bce.get_code_categories')
@@ -126,17 +127,18 @@ class TestUpdateFromBce(unittest.TestCase):
     def test_update_from_bce_no_institution(
             self, mock_connect, mock_auth, mock_links, mock_codes,
             mock_comparison):
-        query = [
+        result = [
             ["0741574J", '400', "MS", "METIERS SANTE", "1997-09-01", None,
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
              " ", "ANNECY", None, 'PU', '20', '1', "test.com"],
             ["0741574L", '320', "MU", "METIERS SANTE UNIV", "1997-09-01", None,
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
              " ", "ANNECY", None, 'PU', '20', '1', "test.com"]]
-        mock_connect().return_value = 1
+        mock_connect.return_value.cursor.return_value.__enter__.return_value.fetchall.return_value = result
         count = update_from_bce()
         instit1 = InstitutionRepository.get('0741574J')
         instit2 = InstitutionRepository.get('0741574L')
+
         self.assertEqual(instit1.is_institution, True)
         self.assertEqual(instit2.is_institution, False)
         self.assertEqual(mock_comparison.called, True)
