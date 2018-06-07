@@ -23,5 +23,6 @@ jobs:
     stage: tests
     before_script:
       touch .env
+      pip install -r requirements-dev.txt
     script:
       sudo make tests
