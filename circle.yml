@@ -3,7 +3,7 @@ dependencies:
         - pip install -r requirements-dev.txt
 machine:
     python:
-        version: 3.4.8
+        version: 3.4
     environment:
         PYTHONPATH: src:test
         APPLICATION_POSTGRES_USER: ubuntu

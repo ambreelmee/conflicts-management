@@ -10,6 +10,8 @@ server:
   ports:
     - '3000:3000'
   command: python src/server.py
+  environment:
+    PYTHONUNBUFFERED: 1
 
 dbdata:
   image: busybox
@@ -34,7 +36,7 @@ testserver:
     APPLICATION_PORT: 5053
     APPLICATION_DB_CONTAINER: TESTDB
     PYTHONUNBUFFERED: 1
-  command: python -m pytest test/
+  command: python -m pytest --cov=src test/
 
 testdb:
   image: postgres:9.4
