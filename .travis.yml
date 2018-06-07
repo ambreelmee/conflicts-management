@@ -7,10 +7,10 @@ git:
   depth: false
 jobs:
   include:
-    - stage: linting
+    stage: linting
     script:
-      - sudo make lint
-    - stage: tests
+      sudo make lint
+    stage: tests
     before_script:
       sudo make db/upgrade
     script:
