@@ -128,7 +128,7 @@ def update_from_bce():
     count_new_institution_bce = 0
     count_new_institution_dataESR = 0
     conn = psycopg2.connect(**params)
-    
+
     with conn:
         with conn.cursor() as curs:
             # select all rows in bce uai

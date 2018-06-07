@@ -1,7 +1,7 @@
 import unittest
 from models.abc import db
 from server import server
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tasks.update_from_bce import (
     compare_esr_without_snapshot, compare_esr_with_snapshot, update_from_bce)
 from repositories import InstitutionSnapshotRepository, InstitutionRepository
@@ -115,7 +115,6 @@ class TestUpdateFromBce(unittest.TestCase):
             "ANNECY", None, 'PU', '20', '1', "test.com", {'id': 1}, snapshot)
         self.assertEqual(args, expected_args)
         self.assertEqual(count, 0)
-
 
     @patch('tasks.update_from_bce.compare_esr_without_snapshot',
            return_value=1)
