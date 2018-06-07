@@ -142,8 +142,7 @@ def update_from_bce():
                 site_web FROM bce_uai""")
             logging.info('start processing data')
             logging.info('%s', curs)
-            rows = curs.fetchall()
-            for row in rows:
+            for row in curs:
                 # get the saved institution for a given uai number
                 # institution will be None if it doesn't exist in our database
                 institution = InstitutionRepository.get(uai_number=row[0])

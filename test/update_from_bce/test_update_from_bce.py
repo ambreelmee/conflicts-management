@@ -134,11 +134,12 @@ class TestUpdateFromBce(unittest.TestCase):
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
              " ", "ANNECY", None, 'PU', '20', '1', "test.com"]]
         curs = mock_connect.return_value.cursor
-        curs.return_value.__enter__.return_value.fetchall.return_value = result
+        curs.return_value.__enter__.return_value.__iter__.return_value = result
         count = update_from_bce()
         instit1 = InstitutionRepository.get('0741574J')
         instit2 = InstitutionRepository.get('0741574L')
 
+        
         self.assertEqual(instit1.is_institution, True)
         self.assertEqual(instit2.is_institution, False)
         self.assertEqual(mock_comparison.called, True)
@@ -161,6 +162,12 @@ class TestUpdateFromBce(unittest.TestCase):
         InstitutionSnapshotRepository.create('0741574I')
         InstitutionRepository.create('0741574J', True)
         InstitutionRepository.create('0741574L', False)
+        query = """ SELECT numero_uai, nature_uai, sigle_uai, patronyme_uai,
+                date_ouverture, date_fermeture, numero_siren_siret_uai,
+                adresse_uai, boite_postale_uai, code_postal_uai,
+                localite_acheminement_uai, numero_telephone_uai,
+                secteur_public_prive, ministere_tutelle, categorie_juridique,
+                site_web FROM bce_uai"""
         result = [
             ["0741574I", '400', "MS", "METIERS SANTE", "1997-09-01", None,
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
@@ -172,9 +179,10 @@ class TestUpdateFromBce(unittest.TestCase):
              "38416491900027", "CHEMIN LA PRAIRIE PROLONGEE", "ANNECY",
              " ", "ANNECY", None, 'PU', '20', '1', "test.com"]]
         curs = mock_connect.return_value.cursor
-        curs.return_value.__enter__.return_value.fetchall.return_value = result
+        curs.return_value.__enter__.return_value.__iter__.return_value = result
         count = update_from_bce()
 
+        curs.return_value.__enter__.return_value.execute.assert_called_once_with(query)
         self.assertEqual(mock_comparison_without_snapshot.called, True)
         self.assertEqual(mock_comparison_without_snapshot.call_count, 1)
         self.assertEqual(mock_comparison_with_snapshot.called, True)
