@@ -1,7 +1,6 @@
 version: 2
 jobs:
    build:
-
      environment:
        PYTHONPATH: src:test
        APPLICATION_POSTGRES_USER: ubuntu
@@ -14,7 +13,7 @@ jobs:
        - checkout
        - run:
           name: install dependencies
-          command: pip install -r requirements-dev.txt
+          command: pip install -r --user requirements-dev.txt
        - run:
           name: database
           command: python src/manage.py db upgrade
@@ -24,6 +23,4 @@ jobs:
 
        - run:
           name: test
-          command:
-
-           python -m pytest --junitxml=$CIRCLE_TEST_REPORTS/junit/report.xml test/
+          command: python -m pytest --junitxml=$CIRCLE_TEST_REPORTS/junit/report.xml test/
