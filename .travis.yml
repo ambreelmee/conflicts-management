@@ -4,6 +4,9 @@ python:
   - "3.4"
 services:
   - docker
+cache:
+  directories:
+    /home/travis/docker/
 env:
   DOCKER_COMPOSE_VERSION=1.21.2
   PYTHONPATH=src:test
@@ -11,6 +14,7 @@ env:
   APPLICATION_POSTGRES_HOST=127.0.0.1
   APPLICATION_POSTGRES_PORT=5432
   APPLICATION_POSTGRES_DB=travis_test
+  DOCKER_CACHE_FILE=/home/travis/docker/cache.tar.gz
 git:
   depth: false
 jobs:
@@ -23,6 +27,8 @@ jobs:
     stage: tests
     before_script:
       touch .env
+      if [ -f ${DOCKER_CACHE_FILE} ]; then gunzip -c ${DOCKER_CACHE_FILE} | docker load; fi
       pip install -r requirements-dev.txt
     script:
       sudo make tests
+      if [[ ${TRAVIS_BRANCH} == "master" ]] && [[ ${TRAVIS_PULL_REQUEST} == "false" ]]; then mkdir -p $(dirname ${DOCKER_CACHE_FILE}) ; docker save $(docker history -q ${DOCKER_REPOSITORY}:${TRAVIS_COMMIT} | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE}; fi
