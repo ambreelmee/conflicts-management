@@ -1,4 +1,4 @@
-# Conflicts management
+# Conflicts management[![Build Status](https://travis-ci.org/ambreelmee/conflicts-management.svg?branch=master)](https://travis-ci.org/ambreelmee/conflicts-management)
 
 This micro-service is part of the backend architecture of the dataESR project.
 Its purpose is to help the administrator updating the main database **dataESR** with distant source databases by dealing with conflictual cases.
