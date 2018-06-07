@@ -139,7 +139,6 @@ class TestUpdateFromBce(unittest.TestCase):
         instit1 = InstitutionRepository.get('0741574J')
         instit2 = InstitutionRepository.get('0741574L')
 
-        
         self.assertEqual(instit1.is_institution, True)
         self.assertEqual(instit2.is_institution, False)
         self.assertEqual(mock_comparison.called, True)
@@ -181,8 +180,8 @@ class TestUpdateFromBce(unittest.TestCase):
         curs = mock_connect.return_value.cursor
         curs.return_value.__enter__.return_value.__iter__.return_value = result
         count = update_from_bce()
-
-        curs.return_value.__enter__.return_value.execute.assert_called_once_with(query)
+        execute = curs.return_value.__enter__.return_value.execute
+        execute.assert_called_once_with(query)
         self.assertEqual(mock_comparison_without_snapshot.called, True)
         self.assertEqual(mock_comparison_without_snapshot.call_count, 1)
         self.assertEqual(mock_comparison_with_snapshot.called, True)

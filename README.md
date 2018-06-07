@@ -16,7 +16,7 @@ Its purpose is to help the administrator updating the main database **dataESR** 
 
 ## Dependencies
 
-You will need [docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/).
+You will need [docker](https://docs.docker.com/engine/installation/) and  [docker-compose](https://docs.docker.com/compose/install/).
 
 ## Getting Started
 
