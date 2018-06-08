@@ -36,7 +36,7 @@ testserver:
     APPLICATION_PORT: 5053
     APPLICATION_DB_CONTAINER: TESTDB
     PYTHONUNBUFFERED: 1
-  command: bash -c "pip install -r requirements-dev.txt && python -m pytest --cov=src test/"
+  command: bash -c "python -m pytest --cov=src test/"
 
 testdb:
   image: postgres:9.4

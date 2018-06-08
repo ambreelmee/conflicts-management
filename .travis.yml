@@ -5,27 +5,34 @@ python:
 services:
   - docker
 cache:
-  directories:
-    /home/travis/docker/
+  pip
 env:
   DOCKER_COMPOSE_VERSION=1.21.2
-  PYTHONPATH=src:test
   APPLICATION_POSTGRES_USER=ubuntu
   APPLICATION_POSTGRES_HOST=127.0.0.1
   APPLICATION_POSTGRES_PORT=5432
   APPLICATION_POSTGRES_DB=travis_test
+  ENVIRONEMENT=DEV
+  IMPORT_PATH=/mnt/test/fixture
+  PYTHONPATH=$PYTHONPATH:src:test
+  PYTHONUSERBASE=/mnt/vendor
+  DB_CONTAINER=DB
+  APPLICATION_HOST=0.0.0.0
+  APPLICATION_PORT=3000
 git:
   depth: false
+before_install:
+  pip install -r requirements-dev.txt --user --upgrade
 jobs:
   include:
     stage: linting
     before_script:
       pip install flake8
     script:
-      flake8
+      python -m flake8 ./src ./test
     stage: tests
     before_script:
+      sudo mkdir -p /mnt/vendor
       touch .env
-      pip install -r requirements-dev.txt
     script:
       sudo make tests
