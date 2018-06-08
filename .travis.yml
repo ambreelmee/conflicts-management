@@ -22,7 +22,7 @@ env:
 git:
   depth: false
 before_install:
-  pip install -r requirements-dev.txt --user --upgrade
+  sudo mkdir -p /mnt/vendor
 jobs:
   include:
     stage: linting
@@ -32,7 +32,6 @@ jobs:
       python -m flake8 ./src ./test
     stage: tests
     before_script:
-      sudo mkdir -p /mnt/vendor
       touch .env
     script:
       sudo make tests
