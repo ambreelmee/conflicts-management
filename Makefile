@@ -1,5 +1,5 @@
 install:
-	docker-compose run --rm server pip install --proxy=10.244.16.9:9090 -r requirements-dev.txt --user --upgrade
+	docker-compose run --rm server pip install -r requirements-dev.txt --user --upgrade
 
 start:
 	docker-compose up server
@@ -8,7 +8,7 @@ daemon:
 	docker-compose up -d server
 
 tests:
-	docker-compose run --rm testserver
+	docker-compose run --rm testserver pip install -r requirements-dev.txt --user --upgrade
 
 lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
