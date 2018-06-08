@@ -31,6 +31,6 @@ jobs:
     stage: tests
     before_script:
       touch .env
-      sudo make install
     script:
+      sudo make install
       sudo make tests
