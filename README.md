@@ -15,7 +15,7 @@ Its purpose is to help the administrator updating the main database **dataESR** 
 1. [Lint](#lint)
 1. [Swagger](#swagger)
 
-## Diagram [French section]
+## Diagram *[French section]*
 
 Le script de mise à jour de dataESR à partir des informations de la bce est structuré selon le schéma ci-dessous :
 #### Schéma global
