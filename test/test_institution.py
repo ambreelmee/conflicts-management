@@ -6,7 +6,30 @@ from server import server
 from models.abc import db
 from models import Institution
 from repositories import InstitutionRepository
-from requests import HTTPError
+
+
+def mocked_requests_delete(*args, **kwargs):
+    class MockResponse:
+        def __init__(self, json_data, status_code):
+            self.json_data = json_data
+            self.status_code = status_code
+
+        def json(self):
+            return self.json_data
+
+    return MockResponse(None, 200)
+
+
+def mocked_requests_delete_failed(*args, **kwargs):
+    class MockResponse:
+        def __init__(self, json_data, status_code):
+            self.json_data = json_data
+            self.status_code = status_code
+
+        def json(self):
+            return self.json_data
+
+    return MockResponse(None, 400)
 
 
 class TestInstitution(unittest.TestCase):
@@ -81,7 +104,7 @@ class TestInstitution(unittest.TestCase):
         institution = InstitutionRepository.get(uai_number='0802145Z')
         self.assertEqual(institution.is_institution, True)
 
-    @patch('requests.delete', side_effect=HTTPError())
+    @patch('requests.delete', side_effect=mocked_requests_delete_failed)
     @patch('util.authorized.validate_token', return_value=True)
     def test_update_false_failed(self, mock_decorator, mock_request):
         """ The PUT on `/institution` should not update an institution's status
@@ -103,12 +126,12 @@ class TestInstitution(unittest.TestCase):
         url = ((os.getenv('INSTITUTION_URL')) + 'institutions/4',)
         args, kwargs = mock_request.call_args
         self.assertEqual(args, url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
         institution = InstitutionRepository.get(uai_number='0802145Z')
         self.assertEqual(institution.is_institution, True)
 
-    @patch('requests.delete')
+    @patch('requests.delete', side_effect=mocked_requests_delete)
     @patch('util.authorized.validate_token', return_value=True)
     def test_update_false_success(self, mock_decorator, mock_request):
         """ The PUT on `/institution` should update an institution's status
