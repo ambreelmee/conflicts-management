@@ -35,7 +35,7 @@ class TestConflict(unittest.TestCase):
               new_value='Batiment B',
               active=True)
         response = self.client.get(
-            '/application/conflict/23',
+            '/api/conflicts/23',
             content_type='application/json'
         )
 
@@ -56,7 +56,7 @@ class TestConflict(unittest.TestCase):
               new_value='36 rue des belles terres',
               active=True)
         response = self.client.put(
-            '/application/conflict/' + str(conflict.id),
+            '/api/conflicts/' + str(conflict.id),
             content_type='application/json',
             headers={'Authorization': 'Bearer token'},
             data=json.dumps({

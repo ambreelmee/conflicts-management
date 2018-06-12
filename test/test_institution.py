@@ -26,7 +26,7 @@ class TestInstitution(unittest.TestCase):
         InstitutionRepository.create(
             uai_number='0802145X', is_institution=True)
         response = self.client.get(
-            '/application/institution/0802145X',
+            '/api/institutions/0802145X',
             content_type='application/json'
         )
 
@@ -42,7 +42,7 @@ class TestInstitution(unittest.TestCase):
     def test_create(self, mock_decorator):
         """ The POST on `/institution` should create an institution """
         response = self.client.post(
-            '/application/institution/0802145Y',
+            '/api/institutions/0802145Y',
             content_type='application/json',
             headers={'Authorization': 'Bearer token'},
             data=json.dumps({
@@ -63,7 +63,7 @@ class TestInstitution(unittest.TestCase):
         InstitutionRepository.create(
             uai_number='0802145Z', is_institution=False)
         response = self.client.put(
-            '/application/institution/0802145Z',
+            '/api/institutions/0802145Z',
             content_type='application/json',
             headers={'Authorization': 'Bearer token'},
             data=json.dumps({
@@ -90,7 +90,7 @@ class TestInstitution(unittest.TestCase):
             uai_number='0802145Z', is_institution=True)
         headers = {'Authorization': 'Bearer token'}
         response = self.client.put(
-            '/application/institution/0802145Z',
+            '/api/institutions/0802145Z',
             content_type='application/json',
             headers=headers,
             data=json.dumps({
@@ -117,7 +117,7 @@ class TestInstitution(unittest.TestCase):
             uai_number='0802145Z', is_institution=True)
         headers = {'Authorization': 'Bearer token'}
         response = self.client.put(
-            '/application/institution/0802145Z',
+            '/api/institutions/0802145Z',
             content_type='application/json',
             headers=headers,
             data=json.dumps({

@@ -10,4 +10,4 @@ from resources import InstitutionResource
 INSTITUTION_BLUEPRINT = Blueprint('institution', __name__)
 Api(INSTITUTION_BLUEPRINT).add_resource(
     InstitutionResource,
-    '/institution/<string:uai_number>')
+    '/institutions/<string:uai_number>')

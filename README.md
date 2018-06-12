@@ -53,7 +53,7 @@ First, clone the project, install dependencies and check that it works
 $ make install      # Install the pip dependencies on the docker container
 $ make start        # Run the container containing your local python server
 ```
-If everything works, you should see the available routes [here](http://127.0.0.1:3000/application/spec).
+If everything works, you should see the available routes [here](http://127.0.0.1:3000/api/spec).
 
 
 ## Commands

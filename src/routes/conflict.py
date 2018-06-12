@@ -10,4 +10,4 @@ from resources import ConflictResource
 CONFLICT_BLUEPRINT = Blueprint('conflict', __name__)
 Api(CONFLICT_BLUEPRINT).add_resource(
     ConflictResource,
-    '/conflict/<string:id_path>')
+    '/conflicts/<string:id_path>')

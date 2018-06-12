@@ -14,5 +14,5 @@ class TestSwagger(unittest.TestCase):
 
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", message="unclosed file")
-            response = self.client.get('/application/spec')
+            response = self.client.get('/api/spec')
         self.assertEqual(response.status_code, 200)
