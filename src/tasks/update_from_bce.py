@@ -24,7 +24,7 @@ def compare_esr_without_snapshot(
         numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web, token, link_categories, code_categories,
+        site_web, commune, token, link_categories, code_categories,
         count):
 
     # 1. create missing snapshot
@@ -33,12 +33,12 @@ def compare_esr_without_snapshot(
         numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web)
+        site_web, commune)
     logging.debug('%s: snapshot created', numero_uai)
 
     # 2. Try to get esr institution
     esr_institution = get_institution_from_esr(
-        uai_number=numero_uai)
+        uai_number=numero_uai, token=token)
     if not esr_institution:
         logging.debug('instution not found in dataESR')
 
@@ -48,8 +48,8 @@ def compare_esr_without_snapshot(
             date_fermeture, numero_siren_siret_uai, adresse_uai,
             boite_postale_uai, code_postal_uai, localite_acheminement_uai,
             numero_telephone_uai, secteur_public_prive, ministere_tutelle,
-            categorie_juridique, site_web, link_categories, code_categories,
-            count)
+            categorie_juridique, site_web, commune, link_categories,
+            code_categories, count)
 
     # if institution exists in dataESR, check for conflicts
     else:
@@ -60,7 +60,7 @@ def compare_esr_without_snapshot(
             date_fermeture, numero_siren_siret_uai, adresse_uai,
             boite_postale_uai, code_postal_uai, localite_acheminement_uai,
             numero_telephone_uai, secteur_public_prive, ministere_tutelle,
-            categorie_juridique, site_web, esr_institution)
+            categorie_juridique, site_web, commune, esr_institution)
     return count
 
 
@@ -69,11 +69,11 @@ def compare_esr_with_snapshot(
         date_fermeture, numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web, token, link_categories, code_categories,
+        site_web, commune, token, link_categories, code_categories,
         count, snapshot):
 
     # get the ESR institution for a given uai number
-    esr_institution = get_institution_from_esr(uai_number=numero_uai)
+    esr_institution = get_institution_from_esr(numero_uai, token)
 
     if not esr_institution:
         count = create_esr_institution(
@@ -81,8 +81,8 @@ def compare_esr_with_snapshot(
             date_fermeture, numero_siren_siret_uai, adresse_uai,
             boite_postale_uai, code_postal_uai, localite_acheminement_uai,
             numero_telephone_uai, secteur_public_prive, ministere_tutelle,
-            categorie_juridique, site_web, link_categories, code_categories,
-            count)
+            categorie_juridique, site_web, commune, link_categories,
+            code_categories, count)
     # institution found in dataESR
     else:
         esr_institution = esr_institution['institution']
@@ -91,7 +91,7 @@ def compare_esr_with_snapshot(
             date_fermeture, numero_siren_siret_uai, adresse_uai,
             boite_postale_uai, code_postal_uai, localite_acheminement_uai,
             numero_telephone_uai, secteur_public_prive, ministere_tutelle,
-            categorie_juridique, site_web, esr_institution, snapshot)
+            categorie_juridique, site_web, commune, esr_institution, snapshot)
 
     # Update snpashot with new values
     InstitutionSnapshotRepository.update(
@@ -100,7 +100,7 @@ def compare_esr_with_snapshot(
         numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web)
+        site_web, commune)
     return count
 
 
@@ -139,7 +139,7 @@ def update_from_bce():
                 adresse_uai, boite_postale_uai, code_postal_uai,
                 localite_acheminement_uai, numero_telephone_uai,
                 secteur_public_prive, ministere_tutelle, categorie_juridique,
-                site_web FROM bce_uai""")
+                site_web, commune FROM bce_uai""")
             logging.info('start processing data')
             logging.info('%s', curs)
             for row in curs:
@@ -178,6 +178,7 @@ def update_from_bce():
                                 secteur_public_prive=row[12],
                                 ministere_tutelle=row[13],
                                 categorie_juridique=row[14], site_web=row[15],
+                                commune=row[16],
                                 link_categories=link_categories,
                                 code_categories=code_categories,
                                 count=count_new_institution_dataESR))
@@ -198,6 +199,7 @@ def update_from_bce():
                             secteur_public_prive=row[12],
                             ministere_tutelle=row[13],
                             categorie_juridique=row[14], site_web=row[15],
+                            commune=row[16],
                             link_categories=link_categories,
                             code_categories=code_categories,
                             count=count_new_institution_dataESR))
@@ -216,7 +218,7 @@ def update_from_bce():
                             secteur_public_prive=row[12],
                             ministere_tutelle=row[13],
                             categorie_juridique=row[14], site_web=row[15],
-                            link_categories=link_categories,
+                            commune=row[16], link_categories=link_categories,
                             code_categories=code_categories,
                             count=count_new_institution_dataESR,
                             snapshot=snapshot))

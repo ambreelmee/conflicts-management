@@ -28,7 +28,8 @@ class InstitutionSnapshotRepository:
                secteur_public_prive=None,
                ministere_tutelle=None,
                categorie_juridique=None,
-               site_web=None):
+               site_web=None,
+               commune=None):
         """ Update an institution's snapshot """
         institution = self.get(numero_uai)
         if sigle_uai:
@@ -59,6 +60,8 @@ class InstitutionSnapshotRepository:
             institution.categorie_juridique = categorie_juridique
         if site_web:
             institution.site_web = site_web
+        if commune:
+            institution.commune = commune
 
         return institution.save()
 
@@ -77,7 +80,8 @@ class InstitutionSnapshotRepository:
                secteur_public_prive=None,
                ministere_tutelle=None,
                categorie_juridique=None,
-               site_web=None):
+               site_web=None,
+               commune=None):
         """ Create a new institution snapshot """
         institution = InstitutionSnapshot(
             numero_uai=numero_uai,
@@ -94,6 +98,7 @@ class InstitutionSnapshotRepository:
             secteur_public_prive=secteur_public_prive,
             ministere_tutelle=ministere_tutelle,
             categorie_juridique=categorie_juridique,
-            site_web=site_web)
+            site_web=site_web,
+            commune=commune)
 
         return institution.save()

@@ -3,7 +3,6 @@ from repositories import ConflictRepository, DatabaseConnectionRepository
 
 
 def get_esr_value(bce_field, esr_institution):
-    print(esr_institution)
     connections = DatabaseConnectionRepository.get(bce_field=bce_field)
     if not connections.criterion_key:
         if connections.bloc:
@@ -37,7 +36,7 @@ def check_for_all_conflict(
         numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web, esr_institution):
+        site_web, commune, esr_institution):
         check_for_conflict(
             uai_number=numero_uai, bce_field='sigle_uai',
             bce_value=sigle_uai, esr_institution=esr_institution)
@@ -81,6 +80,9 @@ def check_for_all_conflict(
         check_for_conflict(
             uai_number=numero_uai, bce_field='site_web',
             bce_value=site_web, esr_institution=esr_institution)
+        check_for_conflict(
+            uai_number=numero_uai, bce_field='commune',
+            bce_value=commune, esr_institution=esr_institution)
 
 
 def check_for_all_conflict_with_snapshot(
@@ -88,7 +90,7 @@ def check_for_all_conflict_with_snapshot(
         numero_siren_siret_uai, adresse_uai, boite_postale_uai,
         code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
-        site_web, esr_institution, snapshot):
+        site_web, commune, esr_institution, snapshot):
         """ check for conflict within snapshot and then with esr value"""
 
         if snapshot.sigle_uai != sigle_uai:
@@ -165,3 +167,8 @@ def check_for_all_conflict_with_snapshot(
             check_for_conflict(
                 uai_number=numero_uai, bce_field='site_web',
                 bce_value=site_web, esr_institution=esr_institution)
+
+        if snapshot.commune != commune:
+            check_for_conflict(
+                uai_number=numero_uai, bce_field='commune',
+                bce_value=commune, esr_institution=esr_institution)

@@ -80,7 +80,6 @@ class InstitutionResource(Resource):
         if is_institution == 'False':
             response = delete_institution(
                 id_esr, request.headers['Authorization'])
-            print(response)
             if not response == 200:
                 return bad_request('unable to delete id_esr')
         repository = InstitutionRepository()

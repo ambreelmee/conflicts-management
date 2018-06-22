@@ -23,6 +23,8 @@ def seed_database_connection():
     DatabaseConnectionRepository.create(
         'numero_telephone_uai', 'address', 'phone', None, None)
     DatabaseConnectionRepository.create(
+        'commune', 'address', 'city_code', None, None)
+    DatabaseConnectionRepository.create(
         'secteur_public_prive', 'tags', 'id', 'category',
         'secteur public prive')
     DatabaseConnectionRepository.create(
