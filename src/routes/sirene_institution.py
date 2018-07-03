@@ -10,4 +10,3 @@ SIRENE_INSTITUTION_BLUEPRINT = Blueprint('sirene_institution', __name__)
 Api(SIRENE_INSTITUTION_BLUEPRINT).add_resource(
     SireneInstitutionResource,
     '/sirene_institutions/<string:siret>')
-

@@ -7,19 +7,21 @@ from flask.ext.restful.reqparse import Argument
 from flask.json import jsonify
 
 from repositories import SireneInstitutionRepository
-from util import parse_params
+from util import parse_params, bad_request
 from util.authorized import authorized
 
 
 class SireneInstitutionResource(Resource):
-    """ Verbs relative to the institutions """
+    """ Verbs relative to the siren institutions """
 
     @staticmethod
     @swag_from('../swagger/institution/GET.yml')
     def get(siret):
-        """ Return an institution key information based on its siret """
+        """ Return a siren institution key information based on its siret """
         institution = SireneInstitutionRepository.get(siret=siret)
-        return jsonify({'institution': institution.to_dict()})
+        if institution:
+            return jsonify({'institution': institution.to_dict()})
+        return bad_request('sirene institution not found in database')
 
     @staticmethod
     @parse_params(
@@ -33,12 +35,17 @@ class SireneInstitutionResource(Resource):
     @swag_from('../swagger/institution/POST.yml')
     @authorized
     def post(siret, date_maj):
-        """ Create an institution based on the sent information """
+        """ Create a siren institution based on the sent information """
+        existing_institution = SireneInstitutionRepository.get(siret=siret)
+        if existing_institution:
+            return bad_request('duplicate value for uai_number')
         institution = SireneInstitutionRepository.create(
             siret=siret,
             date_maj=date_maj
         )
-        return jsonify({'institution': institution.to_dict()})
+        if institution:
+            return jsonify({'institution': institution.to_dict()})
+        return bad_request('unable to create the institution')
 
     @staticmethod
     @authorized
@@ -52,10 +59,13 @@ class SireneInstitutionResource(Resource):
     )
     @swag_from('../swagger/institution/PUT.yml')
     def put(siret, date_maj):
-        """ Update an user based on the sent information """
-        repository = InstitutionRepository()
+        """ Update a siren institution based on the sent information """
+        repository = SireneInstitutionRepository()
         institution = repository.update(
             siret=siret,
             date_maj=date_maj
         )
-        return jsonify({'institution': institution.to_dict()})
+
+        if institution:
+            return jsonify({'institution': institution.to_dict()})
+        return jsonify({'message': 'institution deleted'})

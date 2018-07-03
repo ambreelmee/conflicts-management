@@ -2,6 +2,7 @@
 
 from models import SireneInstitution
 
+
 class SireneInstitutionRepository:
     """ The repository for the institution model """
 
@@ -30,4 +31,3 @@ class SireneInstitutionRepository:
             date_maj=date_maj)
 
         return institution.save()
-

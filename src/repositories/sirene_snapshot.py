@@ -66,16 +66,16 @@ class SireneSnapshotRepository:
                tranche_effectif=None):
         """ Create a new institution snapshot """
         institution = SireneSnapshot(
-            siret = siret,
-            business_name = business_name,
-            address_1 = address_1,
-            address_2 = address_2,
-            zip_code = zip_code,
-            city = city,
-            country = country,
-            city_code = city_code,
-            naf = naf,
-            date_ouverture = date_ouverture,
-            tranche_effectif = tranche_effectif)
+            siret=siret,
+            business_name=business_name,
+            address_1=address_1,
+            address_2=address_2,
+            zip_code=zip_code,
+            city=city,
+            country=country,
+            city_code=city_code,
+            naf=naf,
+            date_ouverture=date_ouverture,
+            tranche_effectif=tranche_effectif)
 
         return institution.save()

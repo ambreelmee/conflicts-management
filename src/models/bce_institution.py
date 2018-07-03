@@ -1,5 +1,5 @@
 """
-Define the Institution model
+Define the BCE Institution model
 """
 from . import db
 from .abc import BaseModel

@@ -1,5 +1,5 @@
 """
-Define the InstitutionSnapshot model
+Define the BCE Snapshot model
 """
 from . import db
 from .abc import BaseModel

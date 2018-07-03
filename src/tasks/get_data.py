@@ -2,6 +2,7 @@ import logging
 import requests
 import os
 
+
 def get_institution_from_esr(source_id, token):
     logging.info('in get institution')
     logging.info(token)
@@ -15,11 +16,12 @@ def get_institution_from_esr(source_id, token):
     logging.info(url)
     logging.info(r)
     if r.status_code == 200:
-        #if 'message' in r.json().keys():
-        #    logging.debug('%s:  institution not found in dataESR', siret)
-        #    return None
+        if 'message' in r.json().keys():
+            logging.debug('%s:  institution not found in dataESR', source_id)
+            return None
         return r.json()
     return None
+
 
 def get_link_categories(token):
     url = os.getenv('INSTITUTION_URL')+'link_categories'
@@ -31,6 +33,7 @@ def get_link_categories(token):
         return r.json()
     else:
         logging.error('unable to get link_categories')
+
 
 def get_code_categories(token):
     url = os.getenv('INSTITUTION_URL')+'code_categories'

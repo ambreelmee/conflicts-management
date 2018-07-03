@@ -1,5 +1,5 @@
 """
-Define the DatabaseConnection model
+Define the DatabaseBridge model
 """
 from . import db
 from .abc import BaseModel

@@ -34,7 +34,7 @@ class ConflictRepository:
     def create(source_id,
                source,
                resource,
-               category, 
+               category,
                field_name,
                current_value,
                new_value,
@@ -51,4 +51,3 @@ class ConflictRepository:
                             active=active,
                             id_esr=id_esr)
         return conflict.save()
-

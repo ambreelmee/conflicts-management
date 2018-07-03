@@ -7,7 +7,7 @@ from repositories import DatabaseBridgeRepository
 
 def find_category_id(categories_list, bce_field):
     # find category_name from bce_field
-    connections = DatabaseConnectionRepository.get(bce_field=bce_field)
+    connections = DatabaseBridgeRepository.get(bce_field=bce_field)
     category_name = connections.criterion_value
     return next((category['id'] for category in categories_list
                 if category['title'] == category_name), None)
@@ -19,8 +19,8 @@ def create_esr_institution(token, numero_uai, sigle_uai, patronyme_uai,
                            boite_postale_uai, code_postal_uai,
                            localite_acheminement_uai, numero_telephone_uai,
                            secteur_public_prive, ministere_tutelle,
-                           categorie_juridique, site_web, link_categories,
-                           code_categories, count):
+                           categorie_juridique, site_web, commune,
+                           link_categories, code_categories, count):
 
     # some institutions have no 'sigle_uai' or no 'patronyme_uai'
     # but field 'name' and 'initials' are mandatory in dataESR
@@ -40,10 +40,10 @@ def create_esr_institution(token, numero_uai, sigle_uai, patronyme_uai,
                      numero_uai, id_esr)
         count += 1
         create_numero_uai(numero_uai, id_esr, headers, code_categories)
-        if adresse_uai:
+        if adresse_uai and code_postal_uai:
             create_address(patronyme_uai, adresse_uai, boite_postale_uai,
                            code_postal_uai, localite_acheminement_uai,
-                           numero_telephone_uai, id_esr, headers)
+                           numero_telephone_uai, commune, id_esr, headers)
         create_ministere_tutelle(ministere_tutelle, id_esr, headers)
         create_public_prive(secteur_public_prive, id_esr, headers)
         create_categorie_juridique(categorie_juridique, id_esr, headers)
@@ -73,11 +73,12 @@ def create_numero_uai(numero_uai, id_esr, headers, code_categories):
 
 def create_address(patronyme_uai, adresse_uai, boite_postale_uai,
                    code_postal_uai, localite_acheminement_uai,
-                   numero_telephone_uai, id_esr, headers):
+                   numero_telephone_uai, commune, id_esr, headers):
     data = {"address":
             {"business_name": patronyme_uai,
              "address_1": adresse_uai,
              "address_2": boite_postale_uai,
+             "city_code": commune,
              "zip_code": code_postal_uai,
              "city": localite_acheminement_uai,
              "country": "France",
