@@ -5,23 +5,23 @@ from . import db
 from .abc import BaseModel
 
 
-class Institution(db.Model, BaseModel):
+class BceInstitution(db.Model, BaseModel):
     """ The Institution model """
-    __tablename__ = 'institution'
+    __tablename__ = 'bce_institution'
 
-    uai_number = db.Column(db.String(20), primary_key=True)
+    uai = db.Column(db.String(20), primary_key=True)
     # classify institutions from bce
     # depending on whether they should be in dataESR or not
     is_institution = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, uai_number, is_institution):
+    def __init__(self, uai, is_institution):
         """ Create a new institution """
-        self.uai_number = uai_number
+        self.uai = uai
         self.is_institution = is_institution
 
     def to_dict(self):
         """ Return the Institution model as a python dictionary """
         return {
-            'uai_number': self.uai_number,
+            'uai': self.uai,
             'is_institution': self.is_institution,
         }

@@ -2,7 +2,7 @@ import logging
 import requests
 import os
 from .constants import public_prive_dict, ministere_dict, cat_juridiques_dict
-from repositories import DatabaseConnectionRepository
+from repositories import DatabaseBridgeRepository
 
 
 def find_category_id(categories_list, bce_field):

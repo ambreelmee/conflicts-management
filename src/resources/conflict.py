@@ -20,7 +20,7 @@ class ConflictResource(Resource):
         """ Return all conflicts for a given institutions """
         conflicts = ConflictRepository.getConflictsByInstitution(
             id_esr=id_path)
-        return [conflict.to_dict() for conflict in conflicts]
+        return [conflict.to_dict() for conflict in conflicts] 
 
     @staticmethod
     @parse_params(

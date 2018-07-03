@@ -1,35 +1,35 @@
-from repositories import DatabaseConnectionRepository
+#from repositories import DatabaseBridgeRepository
 
 
-def seed_database_connection():
-    DatabaseConnectionRepository.create(
+def seed_database_bridge():
+    DatabaseBridgeRepository.create(
         'sigle_uai', 'name', 'initials', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'patronyme_uai', 'name', 'text', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'date_ouverture', None, 'date_start', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'date_fermeture', None, 'date_end', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'numero_siren_siret_uai', 'codes', 'content', 'category', 'siret')
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'adresse_uai', 'address', 'address_1', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'boite_postale_uai', 'address', 'address_2', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'code_postal_uai', 'address', 'zip_code', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'localite_acheminement_uai', 'address', 'city', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'numero_telephone_uai', 'address', 'phone', None, None)
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'secteur_public_prive', 'tags', 'id', 'category',
         'secteur public prive')
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'ministere_tutelle', 'tags', 'id', 'category', 'ministere tutelle')
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'categorie_juridique', 'tags', 'id', 'category', 'catégorie juridique')
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'site_web', 'links', 'content', 'category', 'website')
-    DatabaseConnectionRepository.create(
+    DatabaseBridgeRepository.create(
         'numero_uai', 'codes', 'content', 'category', 'uai')

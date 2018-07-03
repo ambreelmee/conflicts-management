@@ -4,8 +4,9 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 import logging
 from models import db
+from tasks.update_from_sirene import update_from_sirene
 from tasks.update_from_bce import update_from_bce
-from tasks import seed_database_connection
+from tasks import seed_database_bridge
 
 
 server = Flask(__name__)
@@ -23,6 +24,10 @@ def script_update_from_bce():
     logging.getLogger(__name__)
     update_from_bce()
 
+@manager.command
+def script_update_from_sirene():
+    logging.getLogger(__name__)
+    update_from_sirene()
 
 @manager.command
 def seed():
