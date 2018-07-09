@@ -22,13 +22,11 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def script_update_from_bce():
-    logging.getLogger(__name__)
     update_from_bce()
 
 
 @manager.command
 def script_update_from_sirene():
-    logging.getLogger(__name__)
     update_from_sirene()
 
 

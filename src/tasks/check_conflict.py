@@ -1,5 +1,5 @@
 import logging
-from repositories import ConflictRepository
+from repositories import ConflictRepository, DatabaseBridgeRepository
 
 
 def check_for_all_conflict(
@@ -19,9 +19,6 @@ def check_for_all_conflict(
 
 
 def check_for_conflict(siret, sirene_field, sirene_value, esr_institution):
-    logging.info('In check for conflict : %s', sirene_field)
-    if sirene_field == 'naf':
-        logging.info('In check for conflict NAF')
     esr_value = get_esr_value(sirene_field, esr_institution)
     resource_dict = {'business_name': 'address', 'address_1': 'address', 'address_2': 'address', 'zip_code': 'address',
                      'city': 'address', 'country': 'address', 'city_code': 'address', 'naf': 'code', 'date_ouverture': 'institution',
@@ -76,6 +73,24 @@ def get_esr_value(sirene_field, esr_institution):
         return esr_institution['date_start']
     if sirene_field == 'tranche_effectif':
         return esr_institution['size_range']
+
+
+def get_esr_value_from_bce(source_field, esr_institution):
+    connections = DatabaseBridgeRepository.get(source_field=source_field)
+    if not connections.criterion_key:
+        if connections.bloc:
+            bloc = esr_institution[connections.bloc]
+            if bloc:
+                return bloc[connections.value_key]
+            return None
+        return esr_institution[connections.value_key]
+
+    # if there is any criterion, it is always inside a bloc list
+    bloc = esr_institution[connections.bloc]
+    # we search for the item which match criteria
+    return next((item[connections.value_key] for item in bloc
+                if (item[connections.criterion_key] ==
+                    connections.criterion_value)), None)
 
 
 def check_for_all_conflict_with_snapshot(

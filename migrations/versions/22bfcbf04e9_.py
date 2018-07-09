@@ -1,13 +1,13 @@
-"""Create conflict, snapshot and institution tables
+"""Create Conflict tables
 
-Revision ID: f308c15314
+Revision ID: 22bfcbf04e9
 Revises: None
-Create Date: 2018-06-28 15:28:50.622183
+Create Date: 2018-07-09 12:28:35.394036
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'f308c15314'
+revision = '22bfcbf04e9'
 down_revision = None
 
 from alembic import op
@@ -15,20 +15,6 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    op.create_table('sirene_snapshot',
-    sa.Column('siret', sa.String(length=20), nullable=False),
-    sa.Column('business_name', sa.String(length=40), nullable=True),
-    sa.Column('address_1', sa.String(length=40), nullable=True),
-    sa.Column('address_2', sa.String(length=40), nullable=True),
-    sa.Column('zip_code', sa.String(length=5), nullable=True),
-    sa.Column('city', sa.String(length=40), nullable=True),
-    sa.Column('country', sa.String(length=40), nullable=True),
-    sa.Column('city_code', sa.String(length=20), nullable=True),
-    sa.Column('naf', sa.String(length=5), nullable=True),
-    sa.Column('date_ouverture', sa.DateTime(), nullable=True),
-    sa.Column('tranche_effectif', sa.String(length=40), nullable=True),
-    sa.PrimaryKeyConstraint('siret')
-    )
     op.create_table('bce_institution',
     sa.Column('uai', sa.String(length=20), nullable=False),
     sa.Column('is_institution', sa.Boolean(), nullable=False),
@@ -46,6 +32,14 @@ def upgrade():
     sa.Column('active', sa.Boolean(), nullable=False),
     sa.Column('id_esr', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('database_bridge',
+    sa.Column('source_field', sa.String(length=30), nullable=False),
+    sa.Column('bloc', sa.String(length=30), nullable=True),
+    sa.Column('value_key', sa.String(length=30), nullable=False),
+    sa.Column('criterion_key', sa.String(length=30), nullable=True),
+    sa.Column('criterion_value', sa.String(length=30), nullable=True),
+    sa.PrimaryKeyConstraint('source_field')
     )
     op.create_table('bce_snapshot',
     sa.Column('uai', sa.String(length=8), nullable=False),
@@ -66,25 +60,31 @@ def upgrade():
     sa.Column('commune', sa.String(length=5), nullable=True),
     sa.PrimaryKeyConstraint('uai')
     )
-    op.create_table('database_bridge',
-    sa.Column('sirene_field', sa.String(length=30), nullable=False),
-    sa.Column('bloc', sa.String(length=30), nullable=True),
-    sa.Column('value_key', sa.String(length=30), nullable=False),
-    sa.Column('criterion_key', sa.String(length=30), nullable=True),
-    sa.Column('criterion_value', sa.String(length=30), nullable=True),
-    sa.PrimaryKeyConstraint('sirene_field')
-    )
     op.create_table('sirene_institution',
     sa.Column('siret', sa.String(length=20), nullable=False),
     sa.Column('date_maj', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('siret')
     )
+    op.create_table('sirene_snapshot',
+    sa.Column('siret', sa.String(length=20), nullable=False),
+    sa.Column('business_name', sa.String(length=40), nullable=True),
+    sa.Column('address_1', sa.String(length=40), nullable=True),
+    sa.Column('address_2', sa.String(length=40), nullable=True),
+    sa.Column('zip_code', sa.String(length=5), nullable=True),
+    sa.Column('city', sa.String(length=40), nullable=True),
+    sa.Column('country', sa.String(length=40), nullable=True),
+    sa.Column('city_code', sa.String(length=20), nullable=True),
+    sa.Column('naf', sa.String(length=5), nullable=True),
+    sa.Column('date_ouverture', sa.DateTime(), nullable=True),
+    sa.Column('tranche_effectif', sa.String(length=40), nullable=True),
+    sa.PrimaryKeyConstraint('siret')
+    )
 
 
 def downgrade():
+    op.drop_table('sirene_snapshot')
     op.drop_table('sirene_institution')
-    op.drop_table('database_bridge')
     op.drop_table('bce_snapshot')
+    op.drop_table('database_bridge')
     op.drop_table('conflict')
     op.drop_table('bce_institution')
-    op.drop_table('sirene_snapshot')

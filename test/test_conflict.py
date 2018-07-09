@@ -21,19 +21,25 @@ class TestConflict(unittest.TestCase):
 
     def test_get(self):
         conflict_1 = ConflictRepository.create(
-              id_esr=23,
-              uai_number='0802145X',
+              source_id='0802145X',
+              source='bce',
+              resource='address',
+              category='',
               field_name='address_1',
               current_value='12 rue des bois',
               new_value='36 rue des belles feuilles',
-              active=True)
+              active=True,
+              id_esr=23)
         conflict_2 = ConflictRepository.create(
-              id_esr=23,
-              uai_number='0802145X',
+              source_id='0802145X',
+              source='bce',
+              resource='address',
+              category='',
               field_name='address_2',
               current_value='2ème étage',
               new_value='Batiment B',
-              active=True)
+              active=True,
+              id_esr=23)
         response = self.client.get(
             '/api/conflicts/23',
             content_type='application/json'
@@ -49,12 +55,15 @@ class TestConflict(unittest.TestCase):
     def test_update(self, mock_decorator):
         """ The PUT on `/conflict` should update an conflict's status """
         conflict = ConflictRepository.create(
-              id_esr=12,
-              uai_number='0802145Y',
+              source_id='0802145Y',
+              source='bce',
+              resource='address',
+              category='',
               field_name='address_1',
               current_value='12 rue des vignes',
               new_value='36 rue des belles terres',
-              active=True)
+              active=True,
+              id_esr=12)
         response = self.client.put(
             '/api/conflicts/' + str(conflict.id),
             content_type='application/json',
