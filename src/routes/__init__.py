@@ -1,2 +1,3 @@
-from .institution import INSTITUTION_BLUEPRINT
+from .sirene_institution import SIRENE_INSTITUTION_BLUEPRINT
+from .bce_institution import BCE_INSTITUTION_BLUEPRINT
 from .conflict import CONFLICT_BLUEPRINT

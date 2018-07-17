@@ -3,6 +3,19 @@ import requests
 import os
 
 
+def get_institution_from_esr(source_id, token):
+    url = (os.getenv('INSTITUTION_URL')+'codes/search?q='+source_id)
+    headers = {'Authorization': 'Bearer ' + token}
+    proxyDict = {"http": os.getenv('HTTP_PROXY')}
+    r = requests.post(url, proxies=proxyDict, headers=headers)
+    if r.status_code == 200:
+        if 'message' in r.json().keys():
+            logging.debug('%s:  institution not found in dataESR', source_id)
+            return None
+        return r.json()
+    return None
+
+
 def get_link_categories(token):
     url = os.getenv('INSTITUTION_URL')+'link_categories'
     proxyDict = {"http": os.getenv('HTTP_PROXY')}
@@ -25,17 +38,3 @@ def get_code_categories(token):
         return r.json()
     else:
         logging.error('unable to get code_categories')
-
-
-def get_institution_from_esr(uai_number, token):
-    url = (os.getenv('INSTITUTION_URL')+'codes/search?q=' + uai_number +
-           '&status=active')
-    headers = {'Authorization': 'Bearer ' + token}
-    proxyDict = {"http": os.getenv('HTTP_PROXY')}
-    r = requests.post(url, proxies=proxyDict, headers=headers)
-    if r.status_code == 200:
-        if 'message' in r.json().keys():
-            logging.debug('%s:  institution not found in dataESR', uai_number)
-            return None
-        return r.json()
-    return None

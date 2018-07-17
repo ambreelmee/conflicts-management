@@ -1,1 +1,1 @@
-from .seed_database_connection import seed_database_connection
+from .seed_database_bridge import seed_database_bridge

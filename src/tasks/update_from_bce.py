@@ -1,11 +1,10 @@
-
 import logging
 import psycopg2
 import os
-from repositories import InstitutionRepository, InstitutionSnapshotRepository
+from repositories import BceInstitutionRepository, BceSnapshotRepository
 from .authenticate import authenticate
 from .check_conflict import (
-    check_for_all_conflict, check_for_all_conflict_with_snapshot)
+    check_for_all_bce_conflict, check_for_all_bce_conflict_with_snapshot)
 from .create_esr_institution import create_esr_institution
 from .get_data import (
     get_code_categories, get_link_categories, get_institution_from_esr)
@@ -20,34 +19,33 @@ params = {
 
 
 def compare_esr_without_snapshot(
-        numero_uai, sigle_uai, patronyme_uai, date_ouverture, date_fermeture,
-        numero_siren_siret_uai, adresse_uai, boite_postale_uai,
-        code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
+        uai, sigle, patronyme, date_ouverture, date_fermeture,
+        numero_siren_siret, adresse, boite_postale,
+        code_postal, localite_acheminement, numero_telephone,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
         site_web, commune, token, link_categories, code_categories,
         count):
 
     # 1. create missing snapshot
-    InstitutionSnapshotRepository.create(
-        numero_uai, sigle_uai, patronyme_uai, date_ouverture, date_fermeture,
-        numero_siren_siret_uai, adresse_uai, boite_postale_uai,
-        code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
+    BceSnapshotRepository.create(
+        uai, sigle, patronyme, date_ouverture, date_fermeture,
+        numero_siren_siret, adresse, boite_postale,
+        code_postal, localite_acheminement, numero_telephone,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
         site_web, commune)
-    logging.debug('%s: snapshot created', numero_uai)
+    logging.debug('%s: snapshot created', uai)
 
     # 2. Try to get esr institution
-    esr_institution = get_institution_from_esr(
-        uai_number=numero_uai, token=token)
+    esr_institution = get_institution_from_esr(source_id=uai, token=token)
     if not esr_institution:
         logging.debug('instution not found in dataESR')
 
         # if no institution is found, create one
         count = create_esr_institution(
-            token, numero_uai, sigle_uai, patronyme_uai, date_ouverture,
-            date_fermeture, numero_siren_siret_uai, adresse_uai,
-            boite_postale_uai, code_postal_uai, localite_acheminement_uai,
-            numero_telephone_uai, secteur_public_prive, ministere_tutelle,
+            token, uai, sigle, patronyme, date_ouverture,
+            date_fermeture, numero_siren_siret, adresse,
+            boite_postale, code_postal, localite_acheminement,
+            numero_telephone, secteur_public_prive, ministere_tutelle,
             categorie_juridique, site_web, commune, link_categories,
             code_categories, count)
 
@@ -55,50 +53,50 @@ def compare_esr_without_snapshot(
     else:
         logging.debug('institution found in dataESR')
         esr_institution = esr_institution['institution']
-        check_for_all_conflict(
-            numero_uai, sigle_uai, patronyme_uai, date_ouverture,
-            date_fermeture, numero_siren_siret_uai, adresse_uai,
-            boite_postale_uai, code_postal_uai, localite_acheminement_uai,
-            numero_telephone_uai, secteur_public_prive, ministere_tutelle,
+        check_for_all_bce_conflict(
+            uai, sigle, patronyme, date_ouverture,
+            date_fermeture, numero_siren_siret, adresse,
+            boite_postale, code_postal, localite_acheminement,
+            numero_telephone, secteur_public_prive, ministere_tutelle,
             categorie_juridique, site_web, commune, esr_institution)
     return count
 
 
 def compare_esr_with_snapshot(
-        numero_uai, sigle_uai, patronyme_uai, date_ouverture,
-        date_fermeture, numero_siren_siret_uai, adresse_uai, boite_postale_uai,
-        code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
+        uai, sigle, patronyme, date_ouverture,
+        date_fermeture, numero_siren_siret, adresse, boite_postale,
+        code_postal, localite_acheminement, numero_telephone,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
         site_web, commune, token, link_categories, code_categories,
         count, snapshot):
 
     # get the ESR institution for a given uai number
-    esr_institution = get_institution_from_esr(numero_uai, token)
+    esr_institution = get_institution_from_esr(uai, token)
 
     if not esr_institution:
         count = create_esr_institution(
-            token, numero_uai, sigle_uai, patronyme_uai, date_ouverture,
-            date_fermeture, numero_siren_siret_uai, adresse_uai,
-            boite_postale_uai, code_postal_uai, localite_acheminement_uai,
-            numero_telephone_uai, secteur_public_prive, ministere_tutelle,
+            token, uai, sigle, patronyme, date_ouverture,
+            date_fermeture, numero_siren_siret, adresse,
+            boite_postale, code_postal, localite_acheminement,
+            numero_telephone, secteur_public_prive, ministere_tutelle,
             categorie_juridique, site_web, commune, link_categories,
             code_categories, count)
     # institution found in dataESR
     else:
         esr_institution = esr_institution['institution']
-        check_for_all_conflict_with_snapshot(
-            numero_uai, sigle_uai, patronyme_uai, date_ouverture,
-            date_fermeture, numero_siren_siret_uai, adresse_uai,
-            boite_postale_uai, code_postal_uai, localite_acheminement_uai,
-            numero_telephone_uai, secteur_public_prive, ministere_tutelle,
+        check_for_all_bce_conflict_with_snapshot(
+            uai, sigle, patronyme, date_ouverture,
+            date_fermeture, numero_siren_siret, adresse,
+            boite_postale, code_postal, localite_acheminement,
+            numero_telephone, secteur_public_prive, ministere_tutelle,
             categorie_juridique, site_web, commune, esr_institution, snapshot)
 
     # Update snpashot with new values
-    InstitutionSnapshotRepository.update(
-        InstitutionSnapshotRepository(), numero_uai, sigle_uai,
-        patronyme_uai, date_ouverture, date_fermeture,
-        numero_siren_siret_uai, adresse_uai, boite_postale_uai,
-        code_postal_uai, localite_acheminement_uai, numero_telephone_uai,
+    BceSnapshotRepository.update(
+        BceSnapshotRepository(), uai, sigle,
+        patronyme, date_ouverture, date_fermeture,
+        numero_siren_siret, adresse, boite_postale,
+        code_postal, localite_acheminement, numero_telephone,
         secteur_public_prive, ministere_tutelle, categorie_juridique,
         site_web, commune)
     return count
@@ -118,7 +116,7 @@ def update_from_bce():
         '554', '560', '562', '580', '848']
 
     # in order to create any institution, we need to be authenticated
-    token = authenticate()['access_token']
+    token = authenticate()
 
     # in order to create or update some categories, we need to get the
     # connection between categories names stored in database connection
@@ -145,10 +143,10 @@ def update_from_bce():
             for row in curs:
                 # get the saved institution for a given uai number
                 # institution will be None if it doesn't exist in our database
-                institution = InstitutionRepository.get(uai_number=row[0])
+                institution = BceInstitutionRepository.get(uai=row[0])
 
                 # get snapshot if existing
-                snapshot = InstitutionSnapshotRepository.get(numero_uai=row[0])
+                snapshot = BceSnapshotRepository.get(uai=row[0])
 
                 # case of new institution in bce
                 if not (institution or snapshot):
@@ -157,24 +155,23 @@ def update_from_bce():
                     is_institution = row[1] in list_nature_uai
 
                     # save the institution
-                    InstitutionRepository.create(
-                        uai_number=row[0], is_institution=is_institution)
-                    logging.info('%s: institution created with %s',
-                                 row[0], is_institution)
+                    BceInstitutionRepository.create(
+                        uai=row[0], is_institution=is_institution)
+                    logging.info('%s: institution created with %s', row[0], is_institution)
                     count_new_institution_bce += 1
 
                     # create new snapshot if institution is in ESR scope
                     if is_institution:
                         count_new_institution_dataESR = (
                             compare_esr_without_snapshot(
-                                token=token, numero_uai=row[0],
-                                sigle_uai=row[2], patronyme_uai=row[3],
+                                token=token, uai=row[0],
+                                sigle=row[2], patronyme=row[3],
                                 date_ouverture=row[4], date_fermeture=row[5],
-                                numero_siren_siret_uai=row[6],
-                                adresse_uai=row[7], boite_postale_uai=row[8],
-                                code_postal_uai=row[9],
-                                localite_acheminement_uai=row[10],
-                                numero_telephone_uai=row[11],
+                                numero_siren_siret=row[6],
+                                adresse=row[7], boite_postale=row[8],
+                                code_postal=row[9],
+                                localite_acheminement=row[10],
+                                numero_telephone=row[11],
                                 secteur_public_prive=row[12],
                                 ministere_tutelle=row[13],
                                 categorie_juridique=row[14], site_web=row[15],
@@ -189,13 +186,13 @@ def update_from_bce():
                     logging.debug('no snapshot found')
                     count_new_institution_dataESR = (
                         compare_esr_without_snapshot(
-                            token=token, numero_uai=row[0], sigle_uai=row[2],
-                            patronyme_uai=row[3], date_ouverture=row[4],
+                            token=token, uai=row[0], sigle=row[2],
+                            patronyme=row[3], date_ouverture=row[4],
                             date_fermeture=row[5],
-                            numero_siren_siret_uai=row[6], adresse_uai=row[7],
-                            boite_postale_uai=row[8], code_postal_uai=row[9],
-                            localite_acheminement_uai=row[10],
-                            numero_telephone_uai=row[11],
+                            numero_siren_siret=row[6], adresse=row[7],
+                            boite_postale=row[8], code_postal=row[9],
+                            localite_acheminement=row[10],
+                            numero_telephone=row[11],
                             secteur_public_prive=row[12],
                             ministere_tutelle=row[13],
                             categorie_juridique=row[14], site_web=row[15],
@@ -208,13 +205,13 @@ def update_from_bce():
                 elif institution.is_institution and snapshot:
                     count_new_institution_dataESR = (
                         compare_esr_with_snapshot(
-                            token=token, numero_uai=row[0], sigle_uai=row[2],
-                            patronyme_uai=row[3], date_ouverture=row[4],
+                            token=token, uai=row[0], sigle=row[2],
+                            patronyme=row[3], date_ouverture=row[4],
                             date_fermeture=row[5],
-                            numero_siren_siret_uai=row[6], adresse_uai=row[7],
-                            boite_postale_uai=row[8], code_postal_uai=row[9],
-                            localite_acheminement_uai=row[10],
-                            numero_telephone_uai=row[11],
+                            numero_siren_siret=row[6], adresse=row[7],
+                            boite_postale=row[8], code_postal=row[9],
+                            localite_acheminement=row[10],
+                            numero_telephone=row[11],
                             secteur_public_prive=row[12],
                             ministere_tutelle=row[13],
                             categorie_juridique=row[14], site_web=row[15],

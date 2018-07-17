@@ -8,7 +8,7 @@ from flasgger import swag_from
 from flask.ext.restful import Resource
 from flask.ext.restful.reqparse import Argument
 from flask.json import jsonify
-from repositories import InstitutionRepository
+from repositories import BceInstitutionRepository
 from util import parse_params, bad_request
 from util.authorized import authorized
 
@@ -21,14 +21,14 @@ def delete_institution(id_esr, header):
     return response.status_code
 
 
-class InstitutionResource(Resource):
+class BceInstitutionResource(Resource):
     """ Verbs relative to the institutions """
 
     @staticmethod
     @swag_from('../swagger/institution/GET.yml')
-    def get(uai_number):
+    def get(uai):
         """ Return an institution key information based on its uai number """
-        institution = InstitutionRepository.get(uai_number=uai_number)
+        institution = BceInstitutionRepository.get(uai=uai)
         if institution:
             return jsonify({'institution': institution.json})
         return bad_request('institution not found in database')
@@ -43,15 +43,15 @@ class InstitutionResource(Resource):
     )
     @swag_from('../swagger/institution/POST.yml')
     @authorized
-    def post(uai_number, is_institution):
+    def post(uai, is_institution):
         """ Create an institution based on the sent information """
-        existing_institution = InstitutionRepository.get(uai_number=uai_number)
+        existing_institution = BceInstitutionRepository.get(uai=uai)
         if existing_institution:
-            return bad_request('duplicate value for uai_number')
+            return bad_request('duplicate value for uai number')
         if not (is_institution == 'False' or is_institution == 'True'):
             return bad_request('is_institution must be a boolean')
-        institution = InstitutionRepository.create(
-            uai_number=uai_number,
+        institution = BceInstitutionRepository.create(
+            uai=uai,
             is_institution=is_institution,
         )
         if institution:
@@ -73,7 +73,7 @@ class InstitutionResource(Resource):
         ),
     )
     @swag_from('../swagger/institution/PUT.yml')
-    def put(uai_number, is_institution, id_esr):
+    def put(uai, is_institution, id_esr):
         """ Update an user based on the sent information """
         if not (is_institution == 'False' or is_institution == 'True'):
             return bad_request('is_institution must be a boolean')
@@ -82,9 +82,9 @@ class InstitutionResource(Resource):
                 id_esr, request.headers['Authorization'])
             if not response == 200:
                 return bad_request('unable to delete id_esr')
-        repository = InstitutionRepository()
+        repository = BceInstitutionRepository()
         institution = repository.update(
-                uai_number=uai_number,
+                uai=uai,
                 is_institution=is_institution,
         )
         if institution:

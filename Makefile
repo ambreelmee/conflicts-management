@@ -13,11 +13,14 @@ tests:
 lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"
 
-update:
+update_bce:
 	docker-compose run --rm server python src/manage.py script_update_from_bce
 
+update_sirene:
+	docker-compose run --rm server python src/manage.py script_update_from_sirene
+
 db/connect:
-	docker exec -it conflicts-management_db_1 psql -Upostgres
+	docker exec -it conflictsmanagement_db_1 psql -Upostgres
 
 db/downgrade:
 	docker-compose run --rm server python src/manage.py db downgrade

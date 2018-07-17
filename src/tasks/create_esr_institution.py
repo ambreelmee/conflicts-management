@@ -2,12 +2,12 @@ import logging
 import requests
 import os
 from .constants import public_prive_dict, ministere_dict, cat_juridiques_dict
-from repositories import DatabaseConnectionRepository
+from repositories import DatabaseBridgeRepository
 
 
-def find_category_id(categories_list, bce_field):
+def find_category_id(categories_list, source_field):
     # find category_name from bce_field
-    connections = DatabaseConnectionRepository.get(bce_field=bce_field)
+    connections = DatabaseBridgeRepository.get(source_field=source_field)
     category_name = connections.criterion_value
     return next((category['id'] for category in categories_list
                 if category['title'] == category_name), None)
@@ -82,7 +82,8 @@ def create_address(patronyme_uai, adresse_uai, boite_postale_uai,
              "zip_code": code_postal_uai,
              "city": localite_acheminement_uai,
              "country": "France",
-             "phone": numero_telephone_uai}}
+             "phone": numero_telephone_uai,
+             "city_code": commune}}
     url = (os.getenv('INSTITUTION_URL')+'institutions/' + str(id_esr) +
            '/addresses')
     proxyDict = {"http": os.getenv('HTTP_PROXY')}

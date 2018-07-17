@@ -3,8 +3,8 @@ Define the REST verbs relative to the conflicts
 """
 from flasgger import swag_from
 from flask.ext.restful import Resource
-from flask.ext.restful.reqparse import Argument
 from flask.json import jsonify
+from flask.ext.restful.reqparse import Argument
 
 from repositories import ConflictRepository
 from util import parse_params

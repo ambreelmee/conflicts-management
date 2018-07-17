@@ -1,3 +1,4 @@
+import logging
 import unittest
 import os
 from models.abc import db
@@ -7,7 +8,7 @@ from tasks.create_esr_institution import (
     find_category_id, create_numero_uai, create_address,
     create_ministere_tutelle, create_public_prive, create_categorie_juridique,
     create_website, create_siret, create_esr_institution)
-from tasks.seed_database_connection import seed_database_connection
+from tasks.seed_database_bridge import seed_database_bridge
 
 
 class TestCreateEsrInstitution(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestCreateEsrInstitution(unittest.TestCase):
 
     def setUp(self):
         db.create_all()
-        seed_database_connection()
+        seed_database_bridge()
 
     def tearDown(self):
         db.session.remove()
@@ -57,14 +58,14 @@ class TestCreateEsrInstitution(unittest.TestCase):
 
     @patch('requests.post')
     def test_create_address(self, mock_post,):
-        create_address('etablissement', '12 rue des bois', None, '75015',
-                       'Paris', None, '2', {})
+        create_address('etablissement', '12 rue des bois', None, '75015', 'Paris', None, '123', '2', {})
         data = {"address": {
             "business_name": "etablissement", "address_1": "12 rue des bois",
             "address_2": None, "zip_code": '75015', "city": 'Paris',
-            "country": "France", "phone": None}}
+            "country": "France", "phone": None, "city_code": '123'}}
         self.assertEqual(mock_post.called, True)
         args, kwargs = mock_post.call_args
+        logging.debug(kwargs)
         self.assertEqual(kwargs['json'], data)
 
     @patch('requests.post')
@@ -135,11 +136,13 @@ class TestCreateEsrInstitution(unittest.TestCase):
             mock_create_address, mock_create_website, mock_create_siret):
         create_esr_institution(
             'token', 'numero_uai', 'sigle_uai', 'patronyme_uai',
-            'date_ouverture', 'date_fermeture', 'numero_siren_siret_uai',
-            'adresse_uai', 'boite_postale_uai', 'code_postal_uai',
+            'date_ouverture', 'date_fermeture',
+            'numero_siren_siret_uai', 'adresse_uai',
+            'boite_postale_uai', 'code_postal_uai',
             'localite_acheminement_uai', 'numero_telephone_uai',
-            'secteur_public_prive', 'ministere_tutelle', 'categorie_juridique',
-            'site_web', ['link_categories'], ['code_categories'], 0)
+            'secteur_public_prive', 'ministere_tutelle',
+            'categorie_juridique', 'site_web', 'commune',
+            ['link_categories'], ['code_categories'], 0)
         data = {'institution':
                 {'name': 'patronyme_uai',
                  'initials': 'sigle_uai',

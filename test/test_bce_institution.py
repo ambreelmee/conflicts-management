@@ -4,8 +4,8 @@ import os
 from unittest.mock import patch
 from server import server
 from models.abc import db
-from models import Institution
-from repositories import InstitutionRepository
+from models import BceInstitution
+from repositories import BceInstitutionRepository
 
 
 def mocked_requests_delete(*args, **kwargs):
@@ -32,7 +32,7 @@ def mocked_requests_delete_failed(*args, **kwargs):
     return MockResponse(None, 400)
 
 
-class TestInstitution(unittest.TestCase):
+class TestBceInstitution(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -46,10 +46,10 @@ class TestInstitution(unittest.TestCase):
         db.drop_all()
 
     def test_get(self):
-        InstitutionRepository.create(
-            uai_number='0802145X', is_institution=True)
+        BceInstitutionRepository.create(
+            uai='0802145X', is_institution=True)
         response = self.client.get(
-            '/api/institutions/0802145X',
+            '/api/bce_institutions/0802145X',
             content_type='application/json'
         )
 
@@ -58,14 +58,14 @@ class TestInstitution(unittest.TestCase):
         response_json = json.loads(response.data.decode('utf8'))
         self.assertEqual(
             response_json,
-            {'institution': {'uai_number': '0802145X', 'is_institution': True}}
+            {'institution': {'uai': '0802145X', 'is_institution': True}}
         )
 
     @patch('util.authorized.validate_token', return_value=True)
     def test_create(self, mock_decorator):
         """ The POST on `/institution` should create an institution """
         response = self.client.post(
-            '/api/institutions/0802145Y',
+            '/api/bce_institutions/0802145Y',
             content_type='application/json',
             headers={'Authorization': 'Bearer token'},
             data=json.dumps({
@@ -75,18 +75,18 @@ class TestInstitution(unittest.TestCase):
         response_json = json.loads(response.data.decode('utf8'))
         self.assertEqual(
             response_json,
-            {'institution': {'uai_number': '0802145Y', 'is_institution': True}}
+            {'institution': {'uai': '0802145Y', 'is_institution': True}}
         )
-        self.assertEqual(Institution.query.count(), 1)
+        self.assertEqual(BceInstitution.query.count(), 1)
 
     @patch('util.authorized.validate_token', return_value=True)
     def test_update_true(self, mock_decorator):
         """ The PUT on `/institution` should update an institution's status
         if it is updated from False to True"""
-        InstitutionRepository.create(
-            uai_number='0802145Z', is_institution=False)
+        BceInstitutionRepository.create(
+            uai='0802145Z', is_institution=False)
         response = self.client.put(
-            '/api/institutions/0802145Z',
+            '/api/bce_institutions/0802145Z',
             content_type='application/json',
             headers={'Authorization': 'Bearer token'},
             data=json.dumps({
@@ -99,9 +99,9 @@ class TestInstitution(unittest.TestCase):
         self.assertEqual(
             response_json,
             {'institution':
-                {'uai_number': '0802145Z', 'is_institution': True}}
+                {'uai': '0802145Z', 'is_institution': True}}
             )
-        institution = InstitutionRepository.get(uai_number='0802145Z')
+        institution = BceInstitutionRepository.get(uai='0802145Z')
         self.assertEqual(institution.is_institution, True)
 
     @patch('requests.delete', side_effect=mocked_requests_delete_failed)
@@ -109,11 +109,10 @@ class TestInstitution(unittest.TestCase):
     def test_update_false_failed(self, mock_decorator, mock_request):
         """ The PUT on `/institution` should not update an institution's status
         if an error accured when deleting the institution"""
-        InstitutionRepository.create(
-            uai_number='0802145Z', is_institution=True)
+        BceInstitutionRepository.create(uai='0802145Z', is_institution=True)
         headers = {'Authorization': 'Bearer token'}
         response = self.client.put(
-            '/api/institutions/0802145Z',
+            '/api/bce_institutions/0802145Z',
             content_type='application/json',
             headers=headers,
             data=json.dumps({
@@ -128,7 +127,7 @@ class TestInstitution(unittest.TestCase):
         self.assertEqual(args, url)
         self.assertEqual(response.status_code, 400)
 
-        institution = InstitutionRepository.get(uai_number='0802145Z')
+        institution = BceInstitutionRepository.get(uai='0802145Z')
         self.assertEqual(institution.is_institution, True)
 
     @patch('requests.delete', side_effect=mocked_requests_delete)
@@ -136,11 +135,11 @@ class TestInstitution(unittest.TestCase):
     def test_update_false_success(self, mock_decorator, mock_request):
         """ The PUT on `/institution` should update an institution's status
         and delete the institution in dataESR """
-        InstitutionRepository.create(
-            uai_number='0802145Z', is_institution=True)
+        BceInstitutionRepository.create(
+            uai='0802145Z', is_institution=True)
         headers = {'Authorization': 'Bearer token'}
         response = self.client.put(
-            '/api/institutions/0802145Z',
+            '/api/bce_institutions/0802145Z',
             content_type='application/json',
             headers=headers,
             data=json.dumps({
@@ -154,5 +153,5 @@ class TestInstitution(unittest.TestCase):
         self.assertEqual(args, url)
         self.assertEqual(response.status_code, 200)
 
-        institution = InstitutionRepository.get(uai_number='0802145Z')
+        institution = BceInstitutionRepository.get(uai='0802145Z')
         self.assertEqual(institution.is_institution, False)
